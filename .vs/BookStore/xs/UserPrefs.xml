@@ -1,0 +1,38 @@
+﻿<Properties StartupConfiguration="{5142A44E-C656-4268-B57B-2971B82A9C72}|https">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.ItemProperties.BookStore.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workbench>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="BookStore" expanded="True">
+            <Node name="Core" expanded="True">
+              <Node name="BookStore.Application" expanded="True">
+                <Node name="DTOs" expanded="True">
+                  <Node name="Books" expanded="True" />
+                </Node>
+                <Node name="Interfaces" expanded="True">
+                  <Node name="ManagerInterfaces" expanded="True" />
+                </Node>
+                <Node name="Mappings" expanded="True" />
+              </Node>
+            </Node>
+            <Node name="Infrastructure" expanded="True">
+              <Node name="BookStore.Persistence" expanded="True">
+                <Node name="Managers" expanded="True" />
+              </Node>
+            </Node>
+            <Node name="BookStore.API" expanded="True">
+              <Node name="Controllers" expanded="True" />
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MultiItemStartupConfigurations />
+</Properties>
