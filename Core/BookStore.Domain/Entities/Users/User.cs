@@ -14,8 +14,6 @@ public class User : BaseEntity
     public DateTime BirthDay { get; private set; }
     public string PasswordHash { get; private set; }
     public int LoginCount { get; private set; }
-    public bool IsDeleted { get; private set; }
-    public DateTime? DeletedTime { get; private set; }
     public bool IsActivated { get; private set; }
     public DateTime? ResetPasswordDate { get; private set; }
 
@@ -40,14 +38,14 @@ public class User : BaseEntity
     {
         IsActivated = isActivated;
         IsDeleted = false;
-        DeletedTime = null;
+        DeletedDate = null;
     }
 
     public void SetForSoftDelete()
     {
         IsActivated = false;
         IsDeleted = true;
-        DeletedTime = DateTime.UtcNow;
+        DeletedDate = DateTime.UtcNow;
     }
     public void SetDetailsForUpdate(string firstName, string lastName, string email, Gender gender, DateTime dateTime)
     {

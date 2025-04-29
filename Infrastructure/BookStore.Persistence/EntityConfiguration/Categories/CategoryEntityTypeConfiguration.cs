@@ -18,7 +18,7 @@ public class CategoryEntityTypeConfiguration : IEntityTypeConfiguration<Category
         builder.Property(c => c.IsDeleted)
             .HasDefaultValue(false);
 
-        builder.Property(c => c.DeletedTime)
+        builder.Property(c => c.DeletedDate)
             .HasDefaultValue(null);
 
         builder.HasMany(c => c.BookCategories)

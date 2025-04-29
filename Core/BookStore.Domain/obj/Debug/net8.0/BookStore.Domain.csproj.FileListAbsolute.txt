@@ -13,3 +13,4 @@
 /Users/zeyneb/Projects/BookStore/Core/BookStore.Domain/obj/Debug/net8.0/refint/BookStore.Domain.dll
 /Users/zeyneb/Projects/BookStore/Core/BookStore.Domain/obj/Debug/net8.0/BookStore.Domain.pdb
 /Users/zeyneb/Projects/BookStore/Core/BookStore.Domain/obj/Debug/net8.0/ref/BookStore.Domain.dll
+/Users/zeyneb/Projects/BookStore/Core/BookStore.Domain/obj/Debug/net8.0/BookStore.Domain.sourcelink.json

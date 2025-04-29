@@ -7,8 +7,6 @@ public class Category:BaseEntity
     public int? ParentCategoryId { get; private set; }
     public Category? ParentCategory { get; private set; }
     public List<Category> SubCategories { get; private set; }
-    public bool IsDeleted { get; set; }
-    public DateTime DeletedTime { get; set; }
     public ICollection<BookCategory> BookCategories { get; set; } = new List<BookCategory>();
 }
 

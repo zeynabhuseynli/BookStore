@@ -15,3 +15,4 @@
 /Users/zeyneb/Projects/BookStore/Core/BookStore.Application/obj/Debug/net8.0/refint/BookStore.Application.dll
 /Users/zeyneb/Projects/BookStore/Core/BookStore.Application/obj/Debug/net8.0/BookStore.Application.pdb
 /Users/zeyneb/Projects/BookStore/Core/BookStore.Application/obj/Debug/net8.0/ref/BookStore.Application.dll
+/Users/zeyneb/Projects/BookStore/Core/BookStore.Application/obj/Debug/net8.0/BookStore.Application.sourcelink.json

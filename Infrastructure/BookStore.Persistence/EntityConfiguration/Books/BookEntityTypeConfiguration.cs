@@ -1,5 +1,4 @@
 ﻿using BookStore.Domain.Entities.Books;
-using BookStore.Domain.Entities.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -49,7 +48,7 @@ public class BookEntityTypeConfiguration : IEntityTypeConfiguration<Book>
         builder.Property(x => x.IsDeleted)
                .HasDefaultValue(false);
 
-        builder.Property(b => b.DeletedTime)
+        builder.Property(b => b.DeletedDate)
             .HasDefaultValue(null);
 
         builder.HasMany(b => b.Reviews)

@@ -16,6 +16,5 @@ public class Review : BaseEntity
     public List<Review> Replies { get; set; }
     public int BookId { get; set; }
     public Book Book { get; set; }
-    public bool IsDeleted { get; set; } = false;
 }
 

@@ -31,7 +31,7 @@ public class AuthorEntityTypeConfiguration : IEntityTypeConfiguration<Author>
         builder.Property(x => x.IsDeleted)
                .HasDefaultValue(false);
 
-        builder.Property(a => a.DeletedTime)
+        builder.Property(a => a.DeletedDate)
            .HasDefaultValue(null);
 
         builder.Property(x => x.CreatedAt)

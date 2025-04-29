@@ -118,3 +118,4 @@
 /Users/zeyneb/Projects/BookStore/BookStore.API/obj/Debug/net8.0/BookStore.API.pdb
 /Users/zeyneb/Projects/BookStore/BookStore.API/obj/Debug/net8.0/BookStore.API.genruntimeconfig.cache
 /Users/zeyneb/Projects/BookStore/BookStore.API/obj/Debug/net8.0/ref/BookStore.API.dll
+/Users/zeyneb/Projects/BookStore/BookStore.API/obj/Debug/net8.0/BookStore.API.sourcelink.json

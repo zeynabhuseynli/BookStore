@@ -43,7 +43,7 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.IsDeleted)
                .HasDefaultValue(false);
 
-        builder.Property(u => u.DeletedTime)
+        builder.Property(u => u.DeletedDate)
                .HasDefaultValue(null);
 
         builder.Property(u => u.IsActivated)

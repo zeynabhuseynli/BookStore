@@ -9,7 +9,5 @@ public class Author: BaseEntity
     public DateTime? DeathTime { get; set; }
     public DateTime BirthDay { get; set; }
     public ICollection<BookAuthor> Books { get; set; } = new List<BookAuthor>();
-    public bool IsDeleted { get; set; }
-    public DateTime DeletedTime { get; set; }
 }
 

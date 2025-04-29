@@ -19,8 +19,6 @@ public class Book: BaseEntity
     public Language Language { get; set; }
     public Publisher Publisher { get; set; }
     public ICollection<BookAuthor> Authors { get; set; } = new List<BookAuthor>();
-    public bool IsDeleted { get; set; }
-    public DateTime DeletedTime { get; set; }
 
     public List<Review> Reviews { get; set; } = new List<Review>();
 }

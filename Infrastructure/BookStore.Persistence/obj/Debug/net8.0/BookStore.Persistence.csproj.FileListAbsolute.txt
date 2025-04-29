@@ -19,3 +19,4 @@
 /Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/obj/Debug/net8.0/BookStore.Persistence.pdb
 /Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/obj/Debug/net8.0/BookStore.Persistence.genruntimeconfig.cache
 /Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/obj/Debug/net8.0/ref/BookStore.Persistence.dll
+/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/obj/Debug/net8.0/BookStore.Persistence.sourcelink.json
