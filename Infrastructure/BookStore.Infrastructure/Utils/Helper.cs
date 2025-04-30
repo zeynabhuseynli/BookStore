@@ -26,7 +26,5 @@ public static class Helper
     {
         return input.Contains("@") && input.Contains(".");
     }
-
-
 }
 

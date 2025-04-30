@@ -1,4 +1,6 @@
-﻿using BookStore.Persistence.Data;
+﻿using BookStore.Application.Interfaces.IManagers;
+using BookStore.Persistence.Data;
+using BookStore.Persistence.Managers;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -16,6 +18,9 @@ public static class ServiceRegistration
                 options.EnableRetryOnFailure(10, TimeSpan.FromSeconds(3), new List<string>());
             });
         });
+
+        services.AddScoped(typeof(IBaseManager<>), typeof(BaseManager<>));
+        services.AddScoped<IEmailManager, EmailManager>();
     }
 }
 

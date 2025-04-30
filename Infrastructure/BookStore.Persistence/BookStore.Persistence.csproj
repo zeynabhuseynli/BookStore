@@ -14,6 +14,7 @@
     <None Remove="EntityConfiguration\Books\" />
     <None Remove="EntityConfiguration\Categories\" />
     <None Remove="Managers\" />
+    <None Remove="Managers\Helper\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
@@ -23,6 +24,7 @@
     <Folder Include="EntityConfiguration\Books\" />
     <Folder Include="EntityConfiguration\Categories\" />
     <Folder Include="Managers\" />
+    <Folder Include="Managers\Helper\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BookStore.Application\BookStore.Application.csproj" />
@@ -42,5 +44,6 @@
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL.Design" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
     <PackageReference Include="System.Security.Claims" Version="4.3.0" />
+    <PackageReference Include="LinqKit" Version="1.3.8" />
   </ItemGroup>
 </Project>

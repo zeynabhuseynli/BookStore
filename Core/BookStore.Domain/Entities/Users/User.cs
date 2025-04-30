@@ -13,7 +13,7 @@ public class User : BaseEntity
     public Role Role { get; private set; }
     public DateTime BirthDay { get; private set; }
     public string PasswordHash { get; private set; }
-    public int LoginCount { get; private set; }
+    public int LoginCount { get; set; }
     public bool IsActivated { get; private set; }
     public DateTime? ResetPasswordDate { get; private set; }
 

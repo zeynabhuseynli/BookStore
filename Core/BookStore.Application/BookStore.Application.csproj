@@ -14,6 +14,7 @@
     <None Remove="Mappings\" />
     <None Remove="DTOs\Books\" />
     <None Remove="Interfaces\IManagers\" />
+    <None Remove="Interfaces\IManagers\Helper\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Exceptions\" />
@@ -23,6 +24,7 @@
     <Folder Include="Mappings\" />
     <Folder Include="DTOs\Books\" />
     <Folder Include="Interfaces\IManagers\" />
+    <Folder Include="Interfaces\IManagers\Helper\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
