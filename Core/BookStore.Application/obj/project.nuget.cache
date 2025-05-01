@@ -1,11 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Aue8O6u8YteAsePsgRq7nz0xf9Mda3VVZRGTZVmR7Gs47ds8UpdyE8kR4uf/QLsy8xYI4nzZEiiESvoouucUaw==",
+  "dgSpecHash": "rYBI6LFMttH2V5RIOywDBtEvKwmG4zy2C9HRwtGpfvCXWEdgSVZ4PBJcch5Fppbs5d0kF0BiSJcs1ww8L5+g6g==",
   "success": true,
   "projectFilePath": "/Users/zeyneb/Projects/BookStore/Core/BookStore.Application/BookStore.Application.csproj",
   "expectedPackageFiles": [
     "/Users/zeyneb/.nuget/packages/automapper/14.0.0/automapper.14.0.0.nupkg.sha512",
     "/Users/zeyneb/.nuget/packages/fluentvalidation/11.11.0/fluentvalidation.11.11.0.nupkg.sha512",
+    "/Users/zeyneb/.nuget/packages/fluentvalidation.aspnetcore/11.3.0/fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
     "/Users/zeyneb/.nuget/packages/fluentvalidation.dependencyinjectionextensions/11.11.0/fluentvalidation.dependencyinjectionextensions.11.11.0.nupkg.sha512",
     "/Users/zeyneb/.nuget/packages/microsoft.extensions.configuration/8.0.0/microsoft.extensions.configuration.8.0.0.nupkg.sha512",
     "/Users/zeyneb/.nuget/packages/microsoft.extensions.configuration.abstractions/8.0.0/microsoft.extensions.configuration.abstractions.8.0.0.nupkg.sha512",

@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "enoBn7zUpIlJEQyE1KjTDWVdOJuAQZCEIRdVflJy2VJuKLDWb3rBHiNM/4/nZUAHmsWiMjpQX8b8vFqZ4q8p0Q==",
+  "dgSpecHash": "RlxeaS6GEFqaAg2Ycwd5NHu/MB6xw/A00oiV6NYBEGntdUqfug/X2H/L/ywC/EiIWmIh9IQlpKE1Jk0jWiektw==",
   "success": true,
   "projectFilePath": "/Users/zeyneb/Projects/BookStore/BookStore.API/BookStore.API.csproj",
   "expectedPackageFiles": [
     "/Users/zeyneb/.nuget/packages/automapper/14.0.0/automapper.14.0.0.nupkg.sha512",
     "/Users/zeyneb/.nuget/packages/entityframework/6.5.0/entityframework.6.5.0.nupkg.sha512",
     "/Users/zeyneb/.nuget/packages/fluentvalidation/11.11.0/fluentvalidation.11.11.0.nupkg.sha512",
+    "/Users/zeyneb/.nuget/packages/fluentvalidation.aspnetcore/11.3.0/fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
     "/Users/zeyneb/.nuget/packages/fluentvalidation.dependencyinjectionextensions/11.11.0/fluentvalidation.dependencyinjectionextensions.11.11.0.nupkg.sha512",
     "/Users/zeyneb/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/zeyneb/.nuget/packages/linqkit/1.3.8/linqkit.1.3.8.nupkg.sha512",

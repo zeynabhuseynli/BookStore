@@ -13,6 +13,10 @@
     <None Remove="Interfaces\IManagers\" />
     <None Remove="Interfaces\IManagers\Helper\" />
     <None Remove="DTOs\UserDtos\" />
+    <None Remove="Interfaces\IManagers\Books\" />
+    <None Remove="DTOs\AuthorDtos\" />
+    <None Remove="Validators\" />
+    <None Remove="Validators\Authors\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
@@ -21,11 +25,16 @@
     <Folder Include="Interfaces\IManagers\" />
     <Folder Include="Interfaces\IManagers\Helper\" />
     <Folder Include="DTOs\UserDtos\" />
+    <Folder Include="Interfaces\IManagers\Books\" />
+    <Folder Include="DTOs\AuthorDtos\" />
+    <Folder Include="Validators\" />
+    <Folder Include="Validators\Authors\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="AutoMapper" Version="14.0.0" />
+    <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\BookStore.Domain\BookStore.Domain.csproj" />

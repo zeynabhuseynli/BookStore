@@ -1,6 +1,8 @@
 ﻿using BookStore.Application.Interfaces.IManagers;
+using BookStore.Application.Interfaces.IManagers.Books;
 using BookStore.Persistence.Data;
 using BookStore.Persistence.Managers;
+using BookStore.Persistence.Managers.Books;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -21,6 +23,7 @@ public static class ServiceRegistration
 
         services.AddScoped(typeof(IBaseManager<>), typeof(BaseManager<>));
         services.AddScoped<IUserManager, UserManager>();
+        services.AddScoped<IAuthorManager, AuthorManager>();
 
         services.AddTransient<IEmailManager, EmailManager>();
     }

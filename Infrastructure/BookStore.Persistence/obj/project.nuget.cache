@@ -1,12 +1,13 @@
 {
   "version": 2,
-  "dgSpecHash": "bNXVqegZaMxc5djACOl1l98GLQ+dudC57Dh5E1i9ND6Rhp59bdWGhEx8hrCV9s8/2EK+w8nlbrYsc2zMt/RQOQ==",
+  "dgSpecHash": "6hbdJObLC6J5CXdkanTkZ2226f/wLQMjW+VrM4BVktjTtQHaTzS8WArYg+oAqpufvfL1dK6cjdCRKX0M2NAZtw==",
   "success": true,
   "projectFilePath": "/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/BookStore.Persistence.csproj",
   "expectedPackageFiles": [
     "/Users/zeyneb/.nuget/packages/automapper/14.0.0/automapper.14.0.0.nupkg.sha512",
     "/Users/zeyneb/.nuget/packages/entityframework/6.5.0/entityframework.6.5.0.nupkg.sha512",
     "/Users/zeyneb/.nuget/packages/fluentvalidation/11.11.0/fluentvalidation.11.11.0.nupkg.sha512",
+    "/Users/zeyneb/.nuget/packages/fluentvalidation.aspnetcore/11.3.0/fluentvalidation.aspnetcore.11.3.0.nupkg.sha512",
     "/Users/zeyneb/.nuget/packages/fluentvalidation.dependencyinjectionextensions/11.11.0/fluentvalidation.dependencyinjectionextensions.11.11.0.nupkg.sha512",
     "/Users/zeyneb/.nuget/packages/humanizer.core/2.14.1/humanizer.core.2.14.1.nupkg.sha512",
     "/Users/zeyneb/.nuget/packages/linqkit/1.3.8/linqkit.1.3.8.nupkg.sha512",

@@ -148,3 +148,4 @@
 /Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 /Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
 /Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/FluentValidation.AspNetCore.dll
