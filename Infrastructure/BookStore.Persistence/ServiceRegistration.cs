@@ -20,7 +20,9 @@ public static class ServiceRegistration
         });
 
         services.AddScoped(typeof(IBaseManager<>), typeof(BaseManager<>));
-        services.AddScoped<IEmailManager, EmailManager>();
+        services.AddScoped<IUserManager, UserManager>();
+
+        services.AddTransient<IEmailManager, EmailManager>();
     }
 }
 

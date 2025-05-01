@@ -1,15 +1,17 @@
-﻿using BookStore.Domain.Entities.Enums;
+﻿using BookStore.Application.DTOs.UserDtos;
 using BookStore.Domain.Entities.Users;
 
 namespace BookStore.Application.Interfaces.IManagers;
 public interface IUserManager:IBaseManager<User>
 {
-    Task RegisterAsync(User user, string password);
-    Task<User?> LoginAsync(string email, string password);
-    Task UpdateUserAsync(User user, string firstName, string lastName, string email, Gender gender, DateTime birthDate);
-    Task SoftDeleteUserAsync(User user);
-    Task SendResetPasswordOtpAsync(User user);
-    Task<bool> ResetPasswordAsync(User user, int otpCode, string newPassword);
-    bool IsValidEmail(string email);
+    Task<bool> RegisterAsync(RegisterDto dto);
+    Task<TokenResponseDto?> LoginAsync(LoginDto dto);
+    Task SendForgotPasswordOtpAsync(string email);
+    Task<bool> ResetPasswordWithOtpAsync(ResetPasswordDto dto);
+    Task<bool> UpdateUserInfoAsync(UpdateUserDto dto);
+    Task<bool> ChangePasswordAsync(ChangePasswordDto dto);
+    Task<bool> SoftDeleteAsync(int userId);
+    Task<bool> UpdateRoleAsync(UpdateRoleDto dto);
+    Task<UserDto?> GetByEmailAsync(string email);
 }
 

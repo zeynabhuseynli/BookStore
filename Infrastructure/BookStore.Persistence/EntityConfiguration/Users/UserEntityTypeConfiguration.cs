@@ -49,6 +49,9 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         builder.Property(u => u.IsActivated)
                .HasDefaultValue(false);
 
+        builder.Property(u => u.RefreshToken)
+              .HasDefaultValue(null);
+
         builder.Property(u => u.PasswordHash)
             .IsRequired();
 

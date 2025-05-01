@@ -1,89 +1,185 @@
-﻿using BookStore.Application.Interfaces.IManagers;
-using BookStore.Domain.Entities.Enums;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using BookStore.Application.DTOs.UserDtos;
+using BookStore.Application.Interfaces.IManagers;
 using BookStore.Domain.Entities.Users;
 using BookStore.Infrastructure.Utils;
 using BookStore.Persistence.Data;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace BookStore.Persistence.Managers;
 
-public class UserManager : BaseManager<User>, IUserManager
+public class UserManager :BaseManager<User>,IUserManager
 {
-    private readonly AppDbContext _context;
+    private readonly IBaseManager<User> _baseManager;
     private readonly IEmailManager _emailManager;
+    private readonly IConfiguration _configuration;
+    private readonly AppDbContext _dbContext;
 
-    public UserManager(AppDbContext context, IEmailManager emailManager) : base(context)
+
+    public UserManager(AppDbContext context,IEmailManager emailManager, IConfiguration configuration, IBaseManager<User> baseManager):base(context)
     {
-        _context = context;
         _emailManager = emailManager;
+        _configuration = configuration;
+        _baseManager = baseManager;
+        _dbContext = context;
     }
 
-    public bool IsValidEmail(string email)
+    public async Task<bool> RegisterAsync(RegisterDto dto)
     {
-        return _context.Users.All(u => u.Email != email);
+        if (!dto.Email.IsEmail())
+            throw new ArgumentException("Email formatı düzgün deyil.");
+
+        bool isEmailUnique = await _baseManager.IsPropertyUniqueAsync(u => u.Email, dto.Email);
+        if (!isEmailUnique)
+            throw new InvalidOperationException("Bu email artıq istifadə olunub.");
+
+
+
+        var user = new User();
+        user.SetDetailsForRegister(dto.FirstName, dto.LastName, dto.Email, dto.BirthDay, dto.Password);
+        await _baseManager.AddAsync(user);
+        await _baseManager.Commit();
+        return true;
     }
 
-    public async Task RegisterAsync(User user, string password)
+    public async Task<TokenResponseDto?> LoginAsync(LoginDto dto)
     {
-        user.SetDetailsForRegister(user.FirstName, user.LastName, user.Email, user.BirthDay, password);
-        await AddAsync(user);
-        await Commit();
+        var user = await _baseManager.GetAsync(x => x.Email == dto.Email && x.IsActivated);
+        if (user == null) return null;
 
-        await _emailManager.SendEmailAsync(user.Email, "Welcome to BookStore!", $"Hi {user.FirstName}, your account has been created.");
-    }
-
-    public async Task<User?> LoginAsync(string email, string password)
-    {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email && !u.IsDeleted);
-
-        if (user is null || user.PasswordHash != PasswordHasher.HashPassword(password))
-            return null;
-
-        user.SetForLogin(true);
-        await Commit();
-        return user;
-    }
-
-    public async Task UpdateUserAsync(User user, string firstName, string lastName, string email, Gender gender, DateTime birthDate)
-    {
-        user.SetDetailsForUpdate(firstName, lastName, email, gender, birthDate);
-        await Update(user);
-        await Commit();
-
-        await _emailManager.SendEmailAsync(user.Email, "Account Updated", $"Hi {firstName}, your account details have been updated.");
-    }
-
-    public async Task SoftDeleteUserAsync(User user)
-    {
-        user.SetForSoftDelete();
-        await Update(user);
-        await Commit();
-
-        await _emailManager.SendEmailAsync(user.Email, "Account Deleted", "Your account has been soft deleted.");
-    }
-
-    public async Task SendResetPasswordOtpAsync(User user)
-    {
-        var otp = new Random().Next(100000, 999999);
-        user.UpdateOtp(otp);
-        await Update(user);
-        await Commit();
-
-        await _emailManager.SendOtpAsync(user.Email, otp.ToString());
-    }
-
-    public async Task<bool> ResetPasswordAsync(User user, int otpCode, string newPassword)
-    {
-        if (user.PasswordResetOtp == otpCode && user.PasswordResetOtpDate > DateTime.UtcNow)
+        var hashedPassword = PasswordHasher.HashPassword(dto.Password);
+        if (user.PasswordHash != hashedPassword)
         {
-            var hashedPassword = PasswordHasher.HashPassword(newPassword);
-            user.ResetPassword(hashedPassword);
-            await Update(user);
-            await Commit();
-
-            await _emailManager.SendEmailAsync(user.Email, "Password Reset", "Your password has been reset successfully.");
-            return true;
+            user.LoginCount += 1;
+            return null;
         }
-        return false;
+
+        user.SetForLogin();
+        var tokens = GenerateTokens(user);
+
+        user.UpdateRefreshToken(tokens.RefreshToken);
+        await _baseManager.Update(user);
+        await _baseManager.Commit();
+        return tokens;
+    }
+
+    public async Task SendForgotPasswordOtpAsync(string email)
+    {
+        var user = await _baseManager.GetAsync(x => x.Email == email && x.IsActivated);
+        if (user == null) return;
+
+        var otpCode = new Random().Next(100000, 999999);
+        user.UpdateOtp(otpCode);
+        await _baseManager.Update(user);
+        await _baseManager.Commit();
+
+        await _emailManager.SendOtpAsync(user.Email, otpCode.ToString());
+    }
+
+    public async Task<bool> ResetPasswordWithOtpAsync(ResetPasswordDto dto)
+    {
+        var user = await _baseManager.GetAsync(x => x.Email == dto.Email && x.IsActivated);
+        if (user == null || user.PasswordResetOtp != dto.OtpCode || user.PasswordResetOtpDate < DateTime.UtcNow)
+            return false;
+
+        user.ResetPassword(PasswordHasher.HashPassword(dto.NewPassword));
+        await _baseManager.Update(user);
+        await _baseManager.Commit();
+        return true;
+    }
+
+    public async Task<bool> UpdateUserInfoAsync(UpdateUserDto dto)
+    {
+        var user = await _baseManager.GetAsync(x => x.Id == dto.UserId && x.IsActivated);
+        if (user == null) return false;
+
+        user.SetDetailsForUpdate(dto.FirstName, dto.LastName, dto.Email, dto.Gender, dto.BirthDate);
+        user.UpdateRefreshToken(user.RefreshToken);
+        await _baseManager.Update(user);
+        await _baseManager.Commit();
+        return true;
+    }
+
+    public async Task<bool> ChangePasswordAsync(ChangePasswordDto dto)
+    {
+        var user = await _baseManager.GetAsync(x => x.Id == dto.UserId && x.IsActivated);
+        if (user == null) return false;
+
+        user.SetPasswordHash(PasswordHasher.HashPassword(dto.NewPassword));
+        user.UpdateRefreshToken(user.RefreshToken);
+        await _baseManager.Update(user);
+        await _baseManager.Commit();
+        return true;
+    }
+
+    public async Task<bool> SoftDeleteAsync(int userId)
+    {
+        var user = await _baseManager.GetAsync(x => x.Id == userId && x.IsActivated);
+        if (user == null) return false;
+
+        user.SetForSoftDelete();
+        await _baseManager.Update(user);
+        await _baseManager.Commit();
+        return true;
+    }
+
+    public async Task<bool> UpdateRoleAsync(UpdateRoleDto dto)
+    {
+        var user = await _baseManager.GetAsync(x => x.Id == dto.UserId && x.IsActivated);
+        if (user == null) return false;
+
+        user.UpdateRole(dto.Role);
+        await _baseManager.Update(user);
+        await _baseManager.Commit();
+        return true;
+    }
+
+    public async Task<UserDto?> GetByEmailAsync(string email)
+    {
+        var user = await _baseManager.GetAsync(x => x.Email == email && x.IsActivated);
+        if (user == null) return null;
+
+        return new UserDto
+        {
+            Id = user.Id,
+            FirstName = user.FirstName,
+            LastName = user.LastName,
+            Email = user.Email,
+            Gender = user.Gender,
+            BirthDate = user.BirthDay,
+            Role = user.Role
+        };
+    }
+
+    private TokenResponseDto GenerateTokens(User user)
+    {
+        var jwtSettings = _configuration.GetSection("JWTSettings");
+        var secret = jwtSettings["Secret"];
+        var expireAt = int.Parse(jwtSettings["ExpireAt"]); // minute type
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+        var claims = new List<Claim>
+    {
+        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+        new Claim(ClaimTypes.Email, user.Email),
+        new Claim(ClaimTypes.Role, user.Role.ToString())
+    };
+
+        var accessToken = new JwtSecurityToken(
+            expires: DateTime.UtcNow.AddMinutes(expireAt),
+            signingCredentials: creds,
+            claims: claims
+        );
+
+        return new TokenResponseDto
+        {
+            AccessToken = new JwtSecurityTokenHandler().WriteToken(accessToken),
+            RefreshToken = Convert.ToBase64String(Guid.NewGuid().ToByteArray())
+        };
     }
 }

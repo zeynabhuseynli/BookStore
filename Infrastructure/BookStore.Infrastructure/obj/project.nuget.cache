@@ -1,8 +1,14 @@
 {
   "version": 2,
-  "dgSpecHash": "8JbfXbax9ok=",
+  "dgSpecHash": "3VH+zlv84Uzu/tQ0zPrPwZvnZilEc1lJEpcwUc87GxCSl7tCbZWE7UF7ydABUurqXpQon3CDJ1b7OH1hAD+Idg==",
   "success": true,
   "projectFilePath": "/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Infrastructure/BookStore.Infrastructure.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "/Users/zeyneb/.nuget/packages/microsoft.identitymodel.abstractions/8.0.0/microsoft.identitymodel.abstractions.8.0.0.nupkg.sha512",
+    "/Users/zeyneb/.nuget/packages/microsoft.identitymodel.jsonwebtokens/8.0.0/microsoft.identitymodel.jsonwebtokens.8.0.0.nupkg.sha512",
+    "/Users/zeyneb/.nuget/packages/microsoft.identitymodel.logging/8.0.0/microsoft.identitymodel.logging.8.0.0.nupkg.sha512",
+    "/Users/zeyneb/.nuget/packages/microsoft.identitymodel.tokens/8.0.0/microsoft.identitymodel.tokens.8.0.0.nupkg.sha512",
+    "/Users/zeyneb/.nuget/packages/system.identitymodel.tokens.jwt/8.0.0/system.identitymodel.tokens.jwt.8.0.0.nupkg.sha512"
+  ],
   "logs": []
 }

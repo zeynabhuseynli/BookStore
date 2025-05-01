@@ -330,6 +330,9 @@ namespace BookStore.Persistence.Migrations
                     b.Property<DateTime?>("PasswordResetOtpDate")
                         .HasColumnType("timestamp with time zone");
 
+                    b.Property<string>("RefreshToken")
+                        .HasColumnType("text");
+
                     b.Property<DateTime?>("ResetPasswordDate")
                         .HasColumnType("timestamp with time zone");
 

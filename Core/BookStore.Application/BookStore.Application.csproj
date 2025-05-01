@@ -7,24 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Exceptions\" />
     <None Remove="Interfaces\" />
     <None Remove="DTOs\" />
-    <None Remove="DTOs\Authors\" />
     <None Remove="Mappings\" />
-    <None Remove="DTOs\Books\" />
     <None Remove="Interfaces\IManagers\" />
     <None Remove="Interfaces\IManagers\Helper\" />
+    <None Remove="DTOs\UserDtos\" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Exceptions\" />
     <Folder Include="Interfaces\" />
     <Folder Include="DTOs\" />
-    <Folder Include="DTOs\Authors\" />
     <Folder Include="Mappings\" />
-    <Folder Include="DTOs\Books\" />
     <Folder Include="Interfaces\IManagers\" />
     <Folder Include="Interfaces\IManagers\Helper\" />
+    <Folder Include="DTOs\UserDtos\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />

@@ -140,3 +140,11 @@
 /Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/runtimes/win/lib/net6.0/System.Drawing.Common.dll
 /Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/runtimes/win/lib/net6.0/System.Security.Cryptography.ProtectedData.dll
 /Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/runtimes/win/lib/net6.0/System.Windows.Extensions.dll
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/Microsoft.AspNetCore.Authentication.JwtBearer.dll
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/Microsoft.IdentityModel.Abstractions.dll
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/Microsoft.IdentityModel.JsonWebTokens.dll
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/Microsoft.IdentityModel.Logging.dll
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.dll
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/Microsoft.IdentityModel.Tokens.dll
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll

@@ -16,36 +16,37 @@ public class User : BaseEntity
     public int LoginCount { get; set; }
     public bool IsActivated { get; private set; }
     public DateTime? ResetPasswordDate { get; private set; }
+    public string? RefreshToken { get; private set; }
 
     public int? PasswordResetOtp { get; private set; }
     public DateTime? PasswordResetOtpDate { get; private set; }
 
     public List<Review> Reviews { get; private set; } = new List<Review>();
 
-    public void SetDetailsForRegister(string firstName, string lastName, string email,DateTime birthDay, string password)
+    public void SetDetailsForRegister(string firstName, string lastName, string email,DateTime birthDay, string password, Gender gender= Gender.Other)
     {
         FirstName = firstName.Capitalize();
         LastName = lastName.Capitalize();
         Email = email;
-        IsActivated = false;
+        IsActivated = true;
         IsDeleted = false;
         PasswordHash = PasswordHasher.HashPassword(password);
         BirthDay = birthDay;
         Role = Role.SuperAdmin;
-        Gender = Gender.Other;
+        Gender = gender;
     }
-    public void SetForLogin(bool isActivated)
+    public void SetForLogin()
     {
-        IsActivated = isActivated;
+        LoginCount = 0;
         IsDeleted = false;
         DeletedDate = null;
     }
 
     public void SetForSoftDelete()
     {
-        IsActivated = false;
         IsDeleted = true;
         DeletedDate = DateTime.UtcNow;
+        UpdateRefreshToken(null);
     }
     public void SetDetailsForUpdate(string firstName, string lastName, string email, Gender gender, DateTime dateTime)
     {
@@ -54,7 +55,6 @@ public class User : BaseEntity
         Gender = gender;
         BirthDay = dateTime;
         Email = email;
-        IsActivated = true;
         IsDeleted = false;
     }
     public void SetPasswordHash(string newPasswordHash)
@@ -80,9 +80,19 @@ public class User : BaseEntity
         PasswordResetOtp = null;
     }
 
+    public void GetActiveOrDeActive(bool isActiveOrDeActived)
+    {
+        IsActivated = isActiveOrDeActived;
+    }
+
     public void UpdateRole(Role role)
     {
         Role = role;
+    }
+
+    public void UpdateRefreshToken(string? refreshToken)
+    {
+        RefreshToken = refreshToken;
     }
 }
 

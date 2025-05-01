@@ -70,23 +70,18 @@ public class BaseManager<T> : IBaseManager<T> where T : class
     {
         var dbSet = _context.Set<T>();
 
-        // Dinamik predicate yaradılır
-        var predicate = PredicateBuilder.New<T>();
+        var predicate = PredicateBuilder.New<T>(true);
 
-        // Propertinin dəyəri ilə müqayisə edilərək predicate yaradılır
         predicate = predicate.And(Expression.Lambda<Func<T, bool>>(
             Expression.Equal(propertySelector.Body, Expression.Constant(value)),
             propertySelector.Parameters));
 
-        // ID varsa onu istisna edirik
         if (id != 0)
         {
             predicate = predicate.And(e => EF.Property<int>(e, "Id") != id);
         }
 
-        // Predicate tətbiq edilərək yoxlanılır
-        return !await dbSet.AsExpandable().AnyAsync(predicate);
+        return !await dbSet.Where(predicate).AnyAsync(); 
     }
-
 }
 

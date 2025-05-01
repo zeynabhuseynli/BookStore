@@ -10,3 +10,4 @@
 /Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Infrastructure/obj/Debug/net8.0/BookStore.Infrastructure.pdb
 /Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Infrastructure/obj/Debug/net8.0/ref/BookStore.Infrastructure.dll
 /Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Infrastructure/obj/Debug/net8.0/BookStore.Infrastructure.sourcelink.json
+/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Infrastructure/obj/Debug/net8.0/BookStore.Infrastructure.csproj.AssemblyReference.cache

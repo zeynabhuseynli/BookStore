@@ -1,63 +1,30 @@
 ﻿<Properties StartupConfiguration="{5142A44E-C656-4268-B57B-2971B82A9C72}|https">
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
     <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.BookStore.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Infrastructure/BookStore.Persistence/Managers/Helper/BaseManager.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="BookStore.API/Program.cs">
     <Files>
-      <File FileName="Core/BookStore.Domain/Entities/Authors/Author.cs" Line="14" Column="1" />
-      <File FileName="Core/BookStore.Domain/Entities/Authors/BookAuthor.cs" Line="1" Column="1" />
-      <File FileName="Core/BookStore.Domain/Entities/Books/Book.cs" Line="1" Column="1" />
-      <File FileName="Core/BookStore.Domain/Entities/Categories/BookCategory.cs" Line="1" Column="1" />
-      <File FileName="Core/BookStore.Domain/Entities/Categories/Category.cs" Line="1" Column="1" />
-      <File FileName="Core/BookStore.Domain/Entities/Reviews/Review.cs" Line="1" Column="1" />
-      <File FileName="Core/BookStore.Application/Interfaces/IManagers/IBookManager.cs" Line="5" Column="2" />
-      <File FileName="Core/BookStore.Application/Interfaces/IManagers/ICategoryManager.cs" Line="6" Column="1" />
-      <File FileName="Core/BookStore.Application/Interfaces/IManagers/IEmailManager.cs" Line="1" Column="1" />
-      <File FileName="Core/BookStore.Application/Interfaces/IManagers/IReviewManager.cs" Line="5" Column="2" />
-      <File FileName="Core/BookStore.Application/Interfaces/IManagers/IUserManager.cs" Line="1" Column="1" />
-      <File FileName="Infrastructure/BookStore.Persistence/Managers/AuthorManager.cs" Line="10" Column="61" />
-      <File FileName="Infrastructure/BookStore.Persistence/Managers/BookManager.cs" Line="10" Column="5" />
-      <File FileName="Infrastructure/BookStore.Persistence/Managers/CategoryManager.cs" Line="9" Column="4" />
-      <File FileName="Infrastructure/BookStore.Persistence/Managers/ReviewManager.cs" Line="9" Column="5" />
-      <File FileName="Infrastructure/BookStore.Persistence/Managers/Helper/BaseManager.cs" Line="74" Column="41" />
+      <File FileName="BookStore.API/Program.cs" Line="38" Column="1" />
+      <File FileName="BookStore.API/appsettings.json" Line="1" Column="1" />
+      <File FileName="Core/BookStore.Domain/Entities/Users/User.cs" Line="1" Column="1" />
+      <File FileName="Infrastructure/BookStore.Persistence/ServiceRegistration.cs" Line="24" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
-          <Node name="BookStore" expanded="True">
-            <Node name="Core" expanded="True">
-              <Node name="BookStore.Application">
-                <Node name="Interfaces">
-                  <Node name="IManagers" expanded="True">
-                    <Node name="Helper" expanded="True" />
-                  </Node>
-                </Node>
-              </Node>
-              <Node name="BookStore.Domain" expanded="True">
-                <Node name="Common" expanded="True" />
-                <Node name="Entities" expanded="True">
-                  <Node name="Authors" expanded="True" />
-                  <Node name="Books" expanded="True" />
-                  <Node name="Categories" expanded="True" />
-                  <Node name="Reviews" expanded="True" />
-                  <Node name="Users" expanded="True" />
-                </Node>
-              </Node>
-            </Node>
+          <Node name="BookStore">
+            <Node name="Core" expanded="True" />
             <Node name="Infrastructure" expanded="True">
               <Node name="BookStore.Persistence">
-                <Node name="Managers">
-                  <Node name="Helper" expanded="True">
-                    <Node name="BaseManager.cs" selected="True" />
-                  </Node>
-                </Node>
+                <Node name="Managers" expanded="True" />
               </Node>
             </Node>
             <Node name="BookStore.API">
+              <Node name="Dependencies" expanded="True" />
+              <Node name="Controllers" expanded="True" />
               <Node name="appsettings.json" expanded="True" />
+              <Node name="Program.cs" selected="True" />
             </Node>
           </Node>
         </State>
@@ -65,4 +32,6 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.BookStore.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
 </Properties>
