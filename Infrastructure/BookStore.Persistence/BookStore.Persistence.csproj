@@ -16,6 +16,7 @@
     <None Remove="Managers\" />
     <None Remove="Managers\Helper\" />
     <None Remove="Managers\Books\" />
+    <None Remove="Managers\Users\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\" />
@@ -27,6 +28,7 @@
     <Folder Include="Managers\" />
     <Folder Include="Managers\Helper\" />
     <Folder Include="Managers\Books\" />
+    <Folder Include="Managers\Users\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BookStore.Application\BookStore.Application.csproj" />

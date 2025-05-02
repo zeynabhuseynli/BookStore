@@ -36,12 +36,9 @@ public class AuthorController : ControllerBase
     }
 
     // PUT: api/Author/5
-    [HttpPut("update/{id}")]
-    public async Task<IActionResult> UpdateAsync(int id, [FromBody] UpdateAuthorDto dto)
+    [HttpPut("update")]
+    public async Task<IActionResult> UpdateAsync( [FromBody] UpdateAuthorDto dto)
     {
-        if (id != dto.Id)
-            return BadRequest("Author ID mismatch.");
-
         await _authorManager.UpdateAsync(dto);
         return Ok(); 
     }

@@ -17,6 +17,8 @@
     <None Remove="DTOs\AuthorDtos\" />
     <None Remove="Validators\" />
     <None Remove="Validators\Authors\" />
+    <None Remove="Validators\Categories\" />
+    <None Remove="DTOs\Categories\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
@@ -29,6 +31,8 @@
     <Folder Include="DTOs\AuthorDtos\" />
     <Folder Include="Validators\" />
     <Folder Include="Validators\Authors\" />
+    <Folder Include="Validators\Categories\" />
+    <Folder Include="DTOs\Categories\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />
