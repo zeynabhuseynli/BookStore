@@ -83,5 +83,28 @@ public class BaseManager<T> : IBaseManager<T> where T : class
 
         return !await dbSet.Where(predicate).AnyAsync(); 
     }
+
+    public async Task SyncManyToMany<TJoinEntity>(
+    IEnumerable<TJoinEntity> existingEntities,
+    IEnumerable<TJoinEntity> newEntities)
+    where TJoinEntity : class
+    {
+        var toRemove = existingEntities
+            .Except(newEntities)
+            .ToList();
+
+        var toAdd = newEntities
+            .Except(existingEntities)
+            .ToList();
+
+        if (toRemove.Any())
+            _context.Set<TJoinEntity>().RemoveRange(toRemove);
+
+        if (toAdd.Any())
+            await _context.Set<TJoinEntity>().AddRangeAsync(toAdd);
+
+        await _context.SaveChangesAsync();
+    }
+
 }
 

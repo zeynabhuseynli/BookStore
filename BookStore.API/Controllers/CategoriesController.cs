@@ -49,3 +49,5 @@ public class CategoryController : ControllerBase
         return result ? Ok($"Category with ID {id} deleted.") : NotFound();
     }
 }
+
+

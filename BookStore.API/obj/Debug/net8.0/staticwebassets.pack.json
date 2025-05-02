@@ -1,0 +1,53 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/zeyneb/Projects/BookStore/BookStore.API/wwwroot/uploads/books/03e591d8-5bc9-4273-853f-4eb3cc0e9680.jpeg",
+      "PackagePath": "staticwebassets/uploads/books/03e591d8-5bc9-4273-853f-4eb3cc0e9680.jpeg"
+    },
+    {
+      "Id": "/Users/zeyneb/Projects/BookStore/BookStore.API/wwwroot/uploads/books/2fa84c92-522a-4f5c-aff3-64d5e2f28bf7.jpeg",
+      "PackagePath": "staticwebassets/uploads/books/2fa84c92-522a-4f5c-aff3-64d5e2f28bf7.jpeg"
+    },
+    {
+      "Id": "/Users/zeyneb/Projects/BookStore/BookStore.API/wwwroot/uploads/books/584dd2c8-d8f5-4409-8800-e2e283ac857c.jpeg",
+      "PackagePath": "staticwebassets/uploads/books/584dd2c8-d8f5-4409-8800-e2e283ac857c.jpeg"
+    },
+    {
+      "Id": "/Users/zeyneb/Projects/BookStore/BookStore.API/wwwroot/uploads/books/a862e368-75e2-4a91-82f5-eb10b272714c.jpeg",
+      "PackagePath": "staticwebassets/uploads/books/a862e368-75e2-4a91-82f5-eb10b272714c.jpeg"
+    },
+    {
+      "Id": "/Users/zeyneb/Projects/BookStore/BookStore.API/wwwroot/uploads/books/abdd4fd6-3371-49fe-8f12-0a2156909710.pdf",
+      "PackagePath": "staticwebassets/uploads/books/abdd4fd6-3371-49fe-8f12-0a2156909710.pdf"
+    },
+    {
+      "Id": "/Users/zeyneb/Projects/BookStore/BookStore.API/wwwroot/uploads/books/ba8e081e-c327-4b7c-8049-160e7773b752.jpeg",
+      "PackagePath": "staticwebassets/uploads/books/ba8e081e-c327-4b7c-8049-160e7773b752.jpeg"
+    },
+    {
+      "Id": "/Users/zeyneb/Projects/BookStore/BookStore.API/wwwroot/uploads/books/d7930578-4313-44ac-8f15-6ed0b22e9ecd.jpeg",
+      "PackagePath": "staticwebassets/uploads/books/d7930578-4313-44ac-8f15-6ed0b22e9ecd.jpeg"
+    },
+    {
+      "Id": "/Users/zeyneb/Projects/BookStore/BookStore.API/wwwroot/uploads/books/f1685743-1cde-490a-9382-78718fbde564.jpeg",
+      "PackagePath": "staticwebassets/uploads/books/f1685743-1cde-490a-9382-78718fbde564.jpeg"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.BookStore.API.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.BookStore.API.props",
+      "PackagePath": "build\\BookStore.API.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.BookStore.API.props",
+      "PackagePath": "buildMultiTargeting\\BookStore.API.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.BookStore.API.props",
+      "PackagePath": "buildTransitive\\BookStore.API.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

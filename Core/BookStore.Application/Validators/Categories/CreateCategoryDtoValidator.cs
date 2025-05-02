@@ -1,5 +1,4 @@
-﻿using System;
-using BookStore.Application.DTOs.Categories;
+﻿using BookStore.Application.DTOs.Categories;
 using FluentValidation;
 
 namespace BookStore.Application.Validators.Categories;

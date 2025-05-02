@@ -25,6 +25,8 @@ public static class ServiceRegistration
         services.AddScoped<IUserManager, UserManager>();
         services.AddScoped<IAuthorManager, AuthorManager>();
         services.AddScoped<ICategoryManager, CategoryManager>();
+        services.AddScoped<IBookManager, BookManager>();
+        services.AddScoped<IBookFileManager, BookFileManager>();
 
         services.AddTransient<IEmailManager, EmailManager>();
     }
