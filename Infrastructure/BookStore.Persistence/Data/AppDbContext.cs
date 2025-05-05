@@ -1,12 +1,9 @@
-﻿using BookStore.Domain.Entities.Categories;
-using BookStore.Domain.Entities.Enums;
-using BookStore.Domain.Entities.Users;
-using System.Net.Sockets;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
+﻿using BookStore.Domain.Entities.Authors;
 using BookStore.Domain.Entities.Books;
-using BookStore.Domain.Entities.Authors;
+using BookStore.Domain.Entities.Categories;
 using BookStore.Domain.Entities.Reviews;
+using BookStore.Domain.Entities.Users;
+using Microsoft.EntityFrameworkCore;
 
 namespace BookStore.Persistence.Data;
 public class AppDbContext : DbContext

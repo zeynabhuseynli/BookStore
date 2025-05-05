@@ -1,8 +1,7 @@
 ﻿using BookStore.Application.DTOs.UserDtos;
-using BookStore.Domain.Entities.Users;
 
 namespace BookStore.Application.Interfaces.IManagers;
-public interface IUserManager:IBaseManager<User>
+public interface IUserManager
 {
     Task<bool> RegisterAsync(RegisterDto dto);
     Task<TokenResponseDto?> LoginAsync(LoginDto dto);

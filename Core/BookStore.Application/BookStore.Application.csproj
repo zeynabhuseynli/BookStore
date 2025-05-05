@@ -21,6 +21,9 @@
     <None Remove="DTOs\Categories\" />
     <None Remove="DTOs\BookDtos\" />
     <None Remove="Validators\Books\" />
+    <None Remove="Exceptions\" />
+    <None Remove="DTOs\ReviewDtos\" />
+    <None Remove="Validators\Reviews\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
@@ -37,6 +40,9 @@
     <Folder Include="DTOs\Categories\" />
     <Folder Include="DTOs\BookDtos\" />
     <Folder Include="Validators\Books\" />
+    <Folder Include="Exceptions\" />
+    <Folder Include="DTOs\ReviewDtos\" />
+    <Folder Include="Validators\Reviews\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />

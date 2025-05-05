@@ -19,15 +19,15 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {
         var result = await _userManager.RegisterAsync(dto);
-        if (result) return Ok("İstifadəçi qeydiyyatdan keçdi.");
-        return BadRequest("Qeydiyyat zamanı xəta baş verdi.");
+        if (result) return Ok();
+        return BadRequest();
     }
 
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
         var tokens = await _userManager.LoginAsync(dto);
-        if (tokens == null) return Unauthorized("Email və ya şifrə yanlışdır.");
+        if (tokens == null) return Unauthorized("Email or password is not true!");
         return Ok(tokens);
     }
 
@@ -35,15 +35,15 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> SendForgotPasswordOtp([FromBody] string email)
     {
         await _userManager.SendForgotPasswordOtpAsync(email);
-        return Ok("OTP email ünvanınıza göndərildi.");
+        return Ok();
     }
 
     [HttpPost("reset-password")]
     public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
     {
         var result = await _userManager.ResetPasswordWithOtpAsync(dto);
-        if (result) return Ok("Şifrə yeniləndi.");
-        return BadRequest("OTP kodu səhvdir və ya vaxtı keçib.");
+        if (result) return Ok();
+        return BadRequest();
     }
 
     [Authorize]
@@ -51,8 +51,8 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> UpdateUserInfo([FromBody] UpdateUserDto dto)
     {
         var result = await _userManager.UpdateUserInfoAsync(dto);
-        if (result) return Ok("İstifadəçi məlumatları yeniləndi.");
-        return NotFound("İstifadəçi tapılmadı.");
+        if (result) return Ok();
+        return NotFound();
     }
 
     [Authorize]
@@ -60,8 +60,8 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
     {
         var result = await _userManager.ChangePasswordAsync(dto);
-        if (result) return Ok("Şifrə dəyişdirildi.");
-        return NotFound("İstifadəçi tapılmadı.");
+        if (result) return Ok();
+        return NotFound();
     }
 
     [Authorize]
@@ -69,8 +69,8 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> SoftDelete(int id)
     {
         var result = await _userManager.SoftDeleteAsync(id);
-        if (result) return Ok("İstifadəçi silindi.");
-        return NotFound("İstifadəçi tapılmadı.");
+        if (result) return Ok();
+        return NotFound();
     }
 }
 

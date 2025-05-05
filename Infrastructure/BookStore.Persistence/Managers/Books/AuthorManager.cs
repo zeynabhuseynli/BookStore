@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using BookStore.Application.DTOs.AuthorDtos;
+using BookStore.Application.Exceptions;
 using BookStore.Application.Interfaces.IManagers;
 using BookStore.Application.Interfaces.IManagers.Books;
 using BookStore.Domain.Entities.Authors;
+using BookStore.Infrastructure.BaseMessages;
 using FluentValidation;
 
 namespace BookStore.Persistence.Managers.Books;
@@ -35,7 +37,7 @@ public class AuthorManager: IAuthorManager
     public async Task<bool> UpdateAsync(UpdateAuthorDto dto)
     {
         var author = await _baseManager.GetAsync(x=>x.Id==dto.Id);
-        if (author == null) throw new KeyNotFoundException("Author not found.");
+        if (author == null) throw new NotFoundException(UIMessage.GetNotFoundMessage("Author"));
 
         await ValidateUpdateAuthorDto(dto);
         await EnsureAuthorDoesNotExist(dto);
@@ -67,7 +69,7 @@ public class AuthorManager: IAuthorManager
         if (!validationResult.IsValid)
         {
             var errorMessages = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
-            throw new ValidationException($"Validation failed: {errorMessages}");
+            throw new Application.Exceptions.ValidationException();
         }
     }
 
@@ -77,7 +79,7 @@ public class AuthorManager: IAuthorManager
         if (!validationResult.IsValid)
         {
             var errorMessages = string.Join(", ", validationResult.Errors.Select(e => e.ErrorMessage));
-            throw new ValidationException($"Validation failed: {errorMessages}");
+            throw new Application.Exceptions.ValidationException();
         }
     }
 
@@ -88,7 +90,7 @@ public class AuthorManager: IAuthorManager
 
         if (author!=null)
         {
-            throw new InvalidOperationException("An author with this name already exists.");
+            throw new BadRequestException(UIMessage.GetUniqueNamedMessage("Author"));
         }
     }
     #endregion

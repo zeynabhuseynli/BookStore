@@ -1,11 +1,7 @@
 ﻿<Properties StartupConfiguration="{5142A44E-C656-4268-B57B-2971B82A9C72}|https">
-  <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
-  </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints />
+  <MonoDevelop.Ide.ItemProperties.BookStore.AdminPanel FirstBuild="True" />
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.ItemProperties.BookStore.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.Workbench ActiveDocument="Core/BookStore.Application/DTOs/Categories/CategoryDto.cs">
     <Files>
       <File FileName="BookStore.API/Controllers/CategoriesController.cs" Line="48" Column="1" />
@@ -42,4 +38,7 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.ItemProperties.BookStore.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
 </Properties>

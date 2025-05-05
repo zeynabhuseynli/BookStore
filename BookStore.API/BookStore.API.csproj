@@ -21,7 +21,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Infrastructure\BookStore.Persistence\BookStore.Persistence.csproj">
+    <ProjectReference Include="..\BookStore.AdminPanel\BookStore.AdminPanel.csproj">
       <GlobalPropertiesToRemove></GlobalPropertiesToRemove>
     </ProjectReference>
   </ItemGroup>
@@ -30,9 +30,5 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Controllers\" />
-    <Folder Include="wwwroot\" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Remove="wwwroot\" />
   </ItemGroup>
 </Project>

@@ -1,5 +1,6 @@
 ﻿using System;
 using BookStore.Application.DTOs.AuthorDtos;
+using BookStore.Infrastructure.BaseMessages;
 using FluentValidation;
 
 namespace BookStore.Application.Validators.Authors;
@@ -8,16 +9,16 @@ public class CreateAuthorDtoValidator : AbstractValidator<CreateAuthorDto>
     public CreateAuthorDtoValidator()
     {
         RuleFor(x => x.FirstName)
-            .NotEmpty().WithMessage("First name is required.")
-            .MaximumLength(50).WithMessage("First name must be less than 50 characters.");
+            .NotEmpty().WithMessage(UIMessage.GetRequiredMessage("FirstName"))
+            .MaximumLength(50).WithMessage(UIMessage.GetMaxLengthMessage(50, "FirtName"));
 
         RuleFor(x => x.LastName)
-            .NotEmpty().WithMessage("Last name is required.")
-            .MaximumLength(50).WithMessage("Last name must be less than 50 characters.");
+             .NotEmpty().WithMessage(UIMessage.GetRequiredMessage("LastName"))
+            .MaximumLength(50).WithMessage(UIMessage.GetMaxLengthMessage(50, "LastName"));
 
         RuleFor(x => x.Description)
-            .NotEmpty().WithMessage("Description is required.")
-            .MaximumLength(500).WithMessage("Description must be less than 50 characters.");
+             .NotEmpty().WithMessage(UIMessage.GetRequiredMessage("Description"))
+           .MaximumLength(500).WithMessage(UIMessage.GetMaxLengthMessage(500, "Description"));
 
         RuleFor(x => x.BirthDay)
             .LessThan(DateTime.UtcNow).WithMessage("Birthday must be in the past.");

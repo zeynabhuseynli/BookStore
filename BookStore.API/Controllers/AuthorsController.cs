@@ -1,5 +1,6 @@
 ﻿using BookStore.Application.DTOs.AuthorDtos;
 using BookStore.Application.Interfaces.IManagers.Books;
+using BookStore.Infrastructure.BaseMessages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers;
@@ -25,22 +26,7 @@ public class AuthorController : ControllerBase
     public async Task<ActionResult<AuthorDto>> GetByIdAsync(int id)
     {
         var author = await _authorManager.GetByIdAsync(id);
-        return author == null ? NotFound($"Author with ID {id} not found.") : Ok(author);
-    }
-
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateAuthorDto dto)
-    {
-        await _authorManager.CreateAsync(dto);
-        return Ok(); 
-    }
-
-    // PUT: api/Author/5
-    [HttpPut("update")]
-    public async Task<IActionResult> UpdateAsync( [FromBody] UpdateAuthorDto dto)
-    {
-        await _authorManager.UpdateAsync(dto);
-        return Ok(); 
+        return author == null ? NotFound(UIMessage.GetNotFoundMessage("Author id")) : Ok(author);
     }
 }
 

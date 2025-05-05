@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿
+using AutoMapper;
 using BookStore.Application.DTOs.BookDtos;
 using BookStore.Application.Interfaces.IManagers;
 using BookStore.Application.Interfaces.IManagers.Books;
@@ -6,6 +7,7 @@ using BookStore.Domain.Entities.Authors;
 using BookStore.Domain.Entities.Books;
 using BookStore.Domain.Entities.Categories;
 using BookStore.Domain.Entities.Users;
+using BookStore.Infrastructure.BaseMessages;
 using FluentValidation;
 
 namespace BookStore.Persistence.Managers.Books;
@@ -59,7 +61,7 @@ public class BookManager : IBookManager
 
         // Email göndərmək
         var subscribers = await GetAllSubscribers();
-        await _emailManager.SendEmailForSubscribers(subscribers, "Yeni kitab əlavə edildi", book.Title, book.Description);
+        await _emailManager.SendEmailForSubscribers(subscribers, UIMessage.ADD_MESSAGE, book.Title, book.Description);
 
         return true;
     }
@@ -69,7 +71,7 @@ public class BookManager : IBookManager
         await ValidateUpdateDto(dto);
 
         var book = await _baseManager.GetAsync(x => x.Id == dto.Id,"Authors", "BookCategories");
-        if (book == null) throw new KeyNotFoundException("Book not found");
+        if (book == null) throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Book"));
 
         _mapper.Map(dto, book);
 
@@ -127,7 +129,7 @@ public class BookManager : IBookManager
     {
         var book = await _baseManager.GetAsync(x => x.Id == id);
         if (book == null)
-            throw new KeyNotFoundException("Book not found.");
+            throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Book"));
 
         book.DeletedDate = DateTime.UtcNow;
         book.IsDeleted = true;
@@ -141,14 +143,14 @@ public class BookManager : IBookManager
     {
         var result = await _createValidator.ValidateAsync(dto);
         if (!result.IsValid)
-            throw new ValidationException(string.Join(", ", result.Errors.Select(x => x.ErrorMessage)));
+            throw new Application.Exceptions.ValidationException();
     }
 
     private async Task ValidateUpdateDto(UpdateBookDto dto)
     {
         var result = await _updateValidator.ValidateAsync(dto);
         if (!result.IsValid)
-            throw new ValidationException(string.Join(", ", result.Errors.Select(x => x.ErrorMessage)));
+            throw new Application.Exceptions.ValidationException();
     }
 
     private async Task<IEnumerable<User>> GetAllSubscribers()

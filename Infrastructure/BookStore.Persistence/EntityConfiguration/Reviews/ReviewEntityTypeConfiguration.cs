@@ -1,5 +1,4 @@
-﻿using BookStore.Domain.Entities.Enums;
-using BookStore.Domain.Entities.Reviews;
+﻿using BookStore.Domain.Entities.Reviews;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

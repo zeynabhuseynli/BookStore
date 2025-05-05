@@ -1,5 +1,6 @@
 ﻿using BookStore.Application.DTOs.Categories;
 using BookStore.Application.Interfaces.IManagers.Books;
+using BookStore.Infrastructure.BaseMessages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers;
@@ -25,7 +26,7 @@ public class CategoryController : ControllerBase
     public async Task<ActionResult<CategoryDto>> GetByIdAsync(int id)
     {
         var category = await _categoryManager.GetByIdAsync(id);
-        return category == null ? NotFound($"Category with ID {id} not found.") : Ok(category);
+        return category == null ? NotFound(UIMessage.GetNotFoundMessage("Category id")) : Ok(category);
     }
 
     [HttpPost("create")]
@@ -46,8 +47,6 @@ public class CategoryController : ControllerBase
     public async Task<IActionResult> DeleteAsync(int id)
     {
         var result = await _categoryManager.DeleteAsync(id);
-        return result ? Ok($"Category with ID {id} deleted.") : NotFound();
+        return result ? Ok(UIMessage.DELETED_MESSAGE) : NotFound();
     }
 }
-
-

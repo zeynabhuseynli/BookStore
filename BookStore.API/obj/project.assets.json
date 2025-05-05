@@ -2978,6 +2978,23 @@
           "lib/netstandard1.3/System.Xml.XDocument.dll": {}
         }
       },
+      "BookStore.AdminPanel/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "BookStore.Persistence": "1.0.0",
+          "Swashbuckle.AspNetCore": "6.6.2"
+        },
+        "compile": {
+          "bin/placeholder/BookStore.AdminPanel.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/BookStore.AdminPanel.dll": {}
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
+      },
       "BookStore.Application/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
@@ -9299,6 +9316,11 @@
         "system.xml.xdocument.nuspec"
       ]
     },
+    "BookStore.AdminPanel/1.0.0": {
+      "type": "project",
+      "path": "../BookStore.AdminPanel/BookStore.AdminPanel.csproj",
+      "msbuildProject": "../BookStore.AdminPanel/BookStore.AdminPanel.csproj"
+    },
     "BookStore.Application/1.0.0": {
       "type": "project",
       "path": "../Core/BookStore.Application/BookStore.Application.csproj",
@@ -9322,7 +9344,7 @@
   },
   "projectFileDependencyGroups": {
     "net8.0": [
-      "BookStore.Persistence >= 1.0.0",
+      "BookStore.AdminPanel >= 1.0.0",
       "Microsoft.AspNetCore.Authentication.JwtBearer >= 8.0.0",
       "Microsoft.EntityFrameworkCore >= 8.0.0",
       "Microsoft.EntityFrameworkCore.Design >= 8.0.0",
@@ -9357,8 +9379,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/BookStore.Persistence.csproj": {
-              "projectPath": "/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/BookStore.Persistence.csproj"
+            "/Users/zeyneb/Projects/BookStore/BookStore.AdminPanel/BookStore.AdminPanel.csproj": {
+              "projectPath": "/Users/zeyneb/Projects/BookStore/BookStore.AdminPanel/BookStore.AdminPanel.csproj"
             }
           }
         }

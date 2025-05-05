@@ -150,3 +150,9 @@
 /Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/System.IdentityModel.Tokens.Jwt.dll
 /Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/FluentValidation.AspNetCore.dll
 /Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/BookStore.API.staticwebassets.runtime.json
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/BookStore.AdminPanel.deps.json
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/BookStore.AdminPanel.runtimeconfig.json
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/BookStore.AdminPanel.staticwebassets.runtime.json
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/BookStore.AdminPanel
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/BookStore.AdminPanel.dll
+/Users/zeyneb/Projects/BookStore/BookStore.API/bin/Debug/net8.0/BookStore.AdminPanel.pdb

@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using BookStore.Application.DTOs.Categories;
+using BookStore.Application.Exceptions;
 using BookStore.Application.Interfaces.IManagers;
 using BookStore.Application.Interfaces.IManagers.Books;
 using BookStore.Domain.Entities.Categories;
+using BookStore.Infrastructure.BaseMessages;
 using FluentValidation;
 
 namespace BookStore.Persistence.Managers.Books;
@@ -41,7 +43,7 @@ public class CategoryManager : ICategoryManager
         {
             var categ = await _baseManager.GetAsync(x=>x.Id==category.ParentCategoryId);
             if (categ == null)
-                throw new  ValidationException("Not Found ParentCategoryId");
+                throw new  NotFoundException(UIMessage.GetNotFoundMessage("ParentCategoryId"));
             category.ParentCategoryId = dto.ParentCategoryId;
         }
         await _baseManager.AddAsync(category);
@@ -53,7 +55,7 @@ public class CategoryManager : ICategoryManager
     {
         var category = await _baseManager.GetAsync(x => x.Id == dto.Id);
         if (category == null)
-            throw new KeyNotFoundException("Category not found.");
+            throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Category"));
 
         await ValidateUpdateDto(dto);
         await EnsureCategoryNameIsUnique(dto.Name, dto.Id);
@@ -67,7 +69,7 @@ public class CategoryManager : ICategoryManager
         {
             var categ = await _baseManager.GetAsync(x => x.Id == category.ParentCategoryId);
             if (categ == null)
-                throw new ValidationException("Not Found ParentCategoryId");
+                throw new NotFoundException(UIMessage.GetNotFoundMessage("ParentCategoryId"));
             category.ParentCategoryId = dto.ParentCategoryId;
         }
         category.UpdatedAt = DateTime.UtcNow;
@@ -92,13 +94,13 @@ public class CategoryManager : ICategoryManager
     {
         var category = await _baseManager.GetAsync(x => x.Id == id, nameof(Category.SubCategories), nameof(Category.BookCategories));
         if (category == null)
-            throw new KeyNotFoundException("Category not found.");
+            throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Category"));
 
         if (category.SubCategories != null && category.SubCategories.Any())
-            throw new InvalidOperationException("Cannot delete category with subcategories.");
+            throw new BadRequestException("Cannot delete category with subcategories.");
 
         if (category.BookCategories != null && category.BookCategories.Any())
-            throw new InvalidOperationException("Cannot delete category linked to books.");
+            throw new BadRequestException("Cannot delete category linked to books.");
 
         category.DeletedDate = DateTime.UtcNow;
         category.IsDeleted = true;
@@ -114,7 +116,7 @@ public class CategoryManager : ICategoryManager
         if (!result.IsValid)
         {
             var errors = string.Join(", ", result.Errors.Select(e => e.ErrorMessage));
-            throw new ValidationException($"Validation failed: {errors}");
+            throw new Application.Exceptions.ValidationException();
         }
     }
 
@@ -124,7 +126,7 @@ public class CategoryManager : ICategoryManager
         if (!result.IsValid)
         {
             var errors = string.Join(", ", result.Errors.Select(e => e.ErrorMessage));
-            throw new ValidationException($"Validation failed: {errors}");
+            throw new Application.Exceptions.ValidationException();
         }
     }
 
@@ -133,7 +135,7 @@ public class CategoryManager : ICategoryManager
         bool isUnique = await _baseManager.IsPropertyUniqueAsync(x => x.Name, name, id);
         if (!isUnique)
         {
-            throw new InvalidOperationException("Category name must be unique.");
+            throw new BadRequestException(UIMessage.GetUniqueNamedMessage("Category name"));
         }
     }
     #endregion

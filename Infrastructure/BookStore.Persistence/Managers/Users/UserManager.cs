@@ -2,41 +2,37 @@
 using System.Security.Claims;
 using System.Text;
 using BookStore.Application.DTOs.UserDtos;
+using BookStore.Application.Exceptions;
 using BookStore.Application.Interfaces.IManagers;
 using BookStore.Domain.Entities.Users;
+using BookStore.Infrastructure.BaseMessages;
 using BookStore.Infrastructure.Utils;
 using BookStore.Persistence.Data;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace BookStore.Persistence.Managers;
-
-public class UserManager :BaseManager<User>,IUserManager
+public class UserManager : IUserManager
 {
     private readonly IBaseManager<User> _baseManager;
     private readonly IEmailManager _emailManager;
     private readonly IConfiguration _configuration;
-    private readonly AppDbContext _dbContext;
 
-
-    public UserManager(AppDbContext context,IEmailManager emailManager, IConfiguration configuration, IBaseManager<User> baseManager):base(context)
+    public UserManager(AppDbContext context,IEmailManager emailManager, IConfiguration configuration, IBaseManager<User> baseManager)
     {
         _emailManager = emailManager;
         _configuration = configuration;
         _baseManager = baseManager;
-        _dbContext = context;
     }
 
     public async Task<bool> RegisterAsync(RegisterDto dto)
     {
         if (!dto.Email.IsEmail())
-            throw new ArgumentException("Email formatı düzgün deyil.");
+            throw new ArgumentException(UIMessage.GetFormatMessage("Email"));
 
         bool isEmailUnique = await _baseManager.IsPropertyUniqueAsync(u => u.Email, dto.Email);
         if (!isEmailUnique)
-            throw new InvalidOperationException("Bu email artıq istifadə olunub.");
-
-
+            throw new BadRequestException(UIMessage.GetUniqueNamedMessage("Email"));
 
         var user = new User();
         user.SetDetailsForRegister(dto.FirstName, dto.LastName, dto.Email, dto.BirthDay, dto.Password);

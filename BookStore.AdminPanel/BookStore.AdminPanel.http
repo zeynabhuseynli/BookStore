@@ -1,0 +1,7 @@
+﻿@BookStore.AdminPanel_HostAddress = http://localhost:5229
+
+GET {{BookStore.AdminPanel_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
+
