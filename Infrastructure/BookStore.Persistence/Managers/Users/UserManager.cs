@@ -20,7 +20,7 @@ public class UserManager : IUserManager
     private readonly IConfiguration _configuration;
     private readonly IMapper _mapper;
 
-    public UserManager(AppDbContext context, IEmailManager emailManager, IConfiguration configuration, IBaseManager<User> baseManager, IMapper mapper, IClaimManager claimManager)
+    public UserManager(IEmailManager emailManager, IConfiguration configuration, IBaseManager<User> baseManager, IMapper mapper, IClaimManager claimManager)
     {
         _emailManager = emailManager;
         _configuration = configuration;
@@ -77,7 +77,7 @@ public class UserManager : IUserManager
     {
         var user = await _baseManager.GetAsync(x => x.Email == email && x.IsActivated);
         if (user == null)
-            throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("User"));
+            throw new KeyNotFoundException(UIMessage.GetNotFoundMessage($"User for {email}"));
 
         var otpCode = Generator.GenerateOtpCode();
         user.UpdateOtp(otpCode);
@@ -106,7 +106,7 @@ public class UserManager : IUserManager
         var user = await _baseManager.GetAsync(x => x.Id == dto.UserId && x.IsActivated);
         if (user == null) return false;
         if (!await _baseManager.IsPropertyUniqueAsync(u => u.Email, dto.Email, dto.UserId))
-            throw new BadRequestException(UIMessage.GetUniqueNamedMessage("Email"));
+            throw new BadRequestException(UIMessage.GetUniqueNamedMessage(dto.Email));
 
         user.SetDetailsForUpdate(dto.FirstName, dto.LastName, dto.Email, dto.Gender, dto.BirthDate);
         user.UpdateRefreshToken(user.RefreshToken);
@@ -203,4 +203,26 @@ public class UserManager : IUserManager
         await _baseManager.Commit();
         return true;
     }
+
+    public async Task CheckPermissionOrThrowAsync(int? ownerUserId)
+    {
+        var currentUserId = _claimManager.GetCurrentUserId();
+        if (currentUserId <= 0)
+            throw new AuthenticationException("Bu rəyi silmək üçün səlahiyyətiniz yoxdur.");
+
+        await CheckPermissionAsync(currentUserId,ownerUserId);
+        
+    }
+
+    private async Task CheckPermissionAsync(int currentUserId, int? userId)
+    {
+        var currentUser = await _baseManager.GetAsync(x => x.Id == currentUserId && x.IsActivated);
+        if (currentUserId != userId &&
+            currentUser.Role != Role.Admin &&
+            currentUser.Role != Role.SuperAdmin)
+        {
+            throw new AuthenticationException("Bu əməliyyatı yerinə yetirmək üçün səlahiyyətiniz yoxdur.");
+        }
+    }
 }
+

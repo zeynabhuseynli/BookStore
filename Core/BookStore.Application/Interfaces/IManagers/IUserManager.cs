@@ -19,5 +19,7 @@ public interface IUserManager
     Task<List<UserDto>> GetDeactivatedUsersAsync();
     Task<bool> SetUserActivationStatusAsync(int userId, bool activate);
 
+    Task CheckPermissionOrThrowAsync(int? ownerUserId);
+
 }
 
