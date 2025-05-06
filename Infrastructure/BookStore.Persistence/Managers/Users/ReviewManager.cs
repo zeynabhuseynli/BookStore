@@ -32,7 +32,7 @@ public class ReviewManager : IReviewManager
         var review = _mapper.Map<Review>(dto);
         review.CreatedAt = DateTime.UtcNow;
         review.FromUserId = _claimManager.GetCurrentUserId();
-
+        review.CreatedById = review.FromUserId;
         await _baseManager.AddAsync(review);
         await _baseManager.Commit();
         return true;
@@ -48,6 +48,7 @@ public class ReviewManager : IReviewManager
         review.Message = dto.Message;
         review.Rating = dto.Rating;
         review.UpdatedAt = DateTime.UtcNow;
+        review.UpdatedById = review.FromUserId;
 
         await _baseManager.Update(review);
         await _baseManager.Commit();
@@ -122,23 +123,38 @@ public class ReviewManager : IReviewManager
 
     public async Task<bool> DeleteReviewWithRepliesAsync(int reviewId, bool isdeleted=true)
     {
-        var review = await _baseManager.GetAsync(
-            r => r.Id == reviewId,
-            nameof(Review.Replies)
-        );
+        var review = await _baseManager.GetAsync(r => r.Id == reviewId, nameof(Review.Replies));
 
         if (review == null)
             throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Review"));
 
-
         await _userManager.CheckPermissionOrThrowAsync(review.FromUserId);
+
         review.IsDeleted = isdeleted;
-        review.DeletedAt = DateTime.UtcNow;
+        if (isdeleted)
+        {
+            review.DeletedAt = DateTime.UtcNow;
+            review.DeletedById = _claimManager.GetCurrentUserId();
+        }
+        else
+        {
+            review.DeletedAt = null;
+            review.DeletedById = 0;
+        }
 
         foreach (var reply in review.Replies.Where(r => !r.IsDeleted))
         {
             reply.IsDeleted = isdeleted;
-            reply.DeletedAt = DateTime.UtcNow;
+            if (isdeleted)
+            {
+                reply.DeletedAt = DateTime.UtcNow;
+                reply.DeletedById = _claimManager.GetCurrentUserId();
+            }
+            else
+            {
+                reply.DeletedAt = null;
+                reply.DeletedById = 0;
+            }
         }
 
         await _baseManager.Update(review);

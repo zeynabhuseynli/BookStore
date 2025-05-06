@@ -7,8 +7,11 @@ public class AuthorProfile : Profile
 {
     public AuthorProfile()
     {
-        CreateMap<Author, AuthorDto>().ReverseMap();
+        CreateMap<Author, AuthorDto>()
+            .ForMember(dest => dest.BookCount, opt => opt.MapFrom(src => src.Books.Count));
+
         CreateMap<CreateAuthorDto, Author>();
         CreateMap<UpdateAuthorDto, Author>();
+
     }
 }

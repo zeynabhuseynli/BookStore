@@ -8,7 +8,6 @@ using BookStore.Domain.Entities.Enums;
 using BookStore.Domain.Entities.Users;
 using BookStore.Infrastructure.BaseMessages;
 using BookStore.Infrastructure.Utils;
-using BookStore.Persistence.Data;
 using Microsoft.Extensions.Configuration;
 
 namespace BookStore.Persistence.Managers;
@@ -199,6 +198,8 @@ public class UserManager : IUserManager
         if (user == null)
             return false;
         user.GetActiveOrDeActive(activate);
+        user.UpdatedById = _claimManager.GetCurrentUserId();
+        user.UpdatedAt = DateTime.UtcNow;
         await _baseManager.Update(user);
         await _baseManager.Commit();
         return true;
@@ -211,7 +212,6 @@ public class UserManager : IUserManager
             throw new AuthenticationException("Bu rəyi silmək üçün səlahiyyətiniz yoxdur.");
 
         await CheckPermissionAsync(currentUserId,ownerUserId);
-        
     }
 
     private async Task CheckPermissionAsync(int currentUserId, int? userId)

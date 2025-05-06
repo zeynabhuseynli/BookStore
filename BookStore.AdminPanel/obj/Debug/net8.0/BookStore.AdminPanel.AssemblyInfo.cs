@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("BookStore.AdminPanel")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f0bcb590c1acb33bf493a27ca80b318db6fed66c")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d6773d538c78007ec241326db4db12cd7450d22a")]
 [assembly: System.Reflection.AssemblyProductAttribute("BookStore.AdminPanel")]
 [assembly: System.Reflection.AssemblyTitleAttribute("BookStore.AdminPanel")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

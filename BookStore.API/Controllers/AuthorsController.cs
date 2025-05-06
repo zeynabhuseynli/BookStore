@@ -1,32 +1,38 @@
-﻿using BookStore.Application.DTOs.AuthorDtos;
-using BookStore.Application.Interfaces.IManagers.Books;
+﻿using BookStore.Application.Interfaces.IManagers.Books;
 using BookStore.Infrastructure.BaseMessages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class AuthorController : ControllerBase
+public class AuthorsController : ControllerBase
 {
     private readonly IAuthorManager _authorManager;
 
-    public AuthorController(IAuthorManager authorManager)
+    public AuthorsController(IAuthorManager authorManager)
     {
         _authorManager = authorManager;
     }
 
-    [HttpGet("get-all")]
-    public async Task<ActionResult<IEnumerable<AuthorDto>>> GetAllAsync()
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
     {
-        var authors = await _authorManager.GetAllAsync();
+        var author = await _authorManager.GetByIdAsync(id);
+        return (author == null) ? NotFound(UIMessage.GetNotFoundMessage("author for id")) : Ok(author);
+    }
+
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAll()
+    {
+        var authors = await _authorManager.GetAllAuthorsAsync();
         return Ok(authors);
     }
 
-    [HttpGet("get-author/{id}")]
-    public async Task<ActionResult<AuthorDto>> GetByIdAsync(int id)
+    [HttpGet("{id}/books")]
+    public async Task<IActionResult> GetBooksByAuthorId(int id)
     {
-        var author = await _authorManager.GetByIdAsync(id);
-        return author == null ? NotFound(UIMessage.GetNotFoundMessage("Author id")) : Ok(author);
+        var books = await _authorManager.GetBooksByAuthorIdAsync(id);
+        return Ok(books);
     }
 }
 
