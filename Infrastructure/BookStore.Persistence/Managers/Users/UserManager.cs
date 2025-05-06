@@ -1,32 +1,38 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
+﻿using System.Security.Authentication;
+using AutoMapper;
 using BookStore.Application.DTOs.UserDtos;
 using BookStore.Application.Exceptions;
 using BookStore.Application.Interfaces.IManagers;
+using BookStore.Application.Interfaces.IManagers.Helper;
+using BookStore.Domain.Entities.Enums;
 using BookStore.Domain.Entities.Users;
 using BookStore.Infrastructure.BaseMessages;
 using BookStore.Infrastructure.Utils;
 using BookStore.Persistence.Data;
 using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 
 namespace BookStore.Persistence.Managers;
 public class UserManager : IUserManager
 {
     private readonly IBaseManager<User> _baseManager;
+    private readonly IClaimManager _claimManager;
     private readonly IEmailManager _emailManager;
     private readonly IConfiguration _configuration;
+    private readonly IMapper _mapper;
 
-    public UserManager(AppDbContext context,IEmailManager emailManager, IConfiguration configuration, IBaseManager<User> baseManager)
+    public UserManager(AppDbContext context, IEmailManager emailManager, IConfiguration configuration, IBaseManager<User> baseManager, IMapper mapper, IClaimManager claimManager)
     {
         _emailManager = emailManager;
         _configuration = configuration;
         _baseManager = baseManager;
+        _mapper = mapper;
+        _claimManager = claimManager;
     }
 
     public async Task<bool> RegisterAsync(RegisterDto dto)
     {
+        await _baseManager.ValidateAsync(dto);
+
         if (!dto.Email.IsEmail())
             throw new ArgumentException(UIMessage.GetFormatMessage("Email"));
 
@@ -43,19 +49,24 @@ public class UserManager : IUserManager
 
     public async Task<TokenResponseDto?> LoginAsync(LoginDto dto)
     {
+        await _baseManager.ValidateAsync(dto);
         var user = await _baseManager.GetAsync(x => x.Email == dto.Email && x.IsActivated);
         if (user == null) return null;
 
-        var hashedPassword = PasswordHasher.HashPassword(dto.Password);
-        if (user.PasswordHash != hashedPassword)
+        if (!PasswordHasher.VerifyPassword(user.PasswordHash, dto.Password))
         {
             user.LoginCount += 1;
             return null;
         }
 
         user.SetForLogin();
-        var tokens = GenerateTokens(user);
+        var jwtSettings = _configuration.GetSection("JWTSettings");
+        var secret = jwtSettings["Secret"];
+        var expireAt = int.Parse(jwtSettings["ExpireAt"]);
 
+        var tokens = Generator.GenerateTokens(user.Id,user.Email,user.Role.ToString(), secret, expireAt);
+        if (tokens == null)
+            throw new AuthenticationException(UIMessage.INVALID_MESSAGE);
         user.UpdateRefreshToken(tokens.RefreshToken);
         await _baseManager.Update(user);
         await _baseManager.Commit();
@@ -65,9 +76,10 @@ public class UserManager : IUserManager
     public async Task SendForgotPasswordOtpAsync(string email)
     {
         var user = await _baseManager.GetAsync(x => x.Email == email && x.IsActivated);
-        if (user == null) return;
+        if (user == null)
+            throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("User"));
 
-        var otpCode = new Random().Next(100000, 999999);
+        var otpCode = Generator.GenerateOtpCode();
         user.UpdateOtp(otpCode);
         await _baseManager.Update(user);
         await _baseManager.Commit();
@@ -77,6 +89,7 @@ public class UserManager : IUserManager
 
     public async Task<bool> ResetPasswordWithOtpAsync(ResetPasswordDto dto)
     {
+        await _baseManager.ValidateAsync(dto);
         var user = await _baseManager.GetAsync(x => x.Email == dto.Email && x.IsActivated);
         if (user == null || user.PasswordResetOtp != dto.OtpCode || user.PasswordResetOtpDate < DateTime.UtcNow)
             return false;
@@ -89,8 +102,11 @@ public class UserManager : IUserManager
 
     public async Task<bool> UpdateUserInfoAsync(UpdateUserDto dto)
     {
+        await _baseManager.ValidateAsync(dto);
         var user = await _baseManager.GetAsync(x => x.Id == dto.UserId && x.IsActivated);
         if (user == null) return false;
+        if (!await _baseManager.IsPropertyUniqueAsync(u => u.Email, dto.Email, dto.UserId))
+            throw new BadRequestException(UIMessage.GetUniqueNamedMessage("Email"));
 
         user.SetDetailsForUpdate(dto.FirstName, dto.LastName, dto.Email, dto.Gender, dto.BirthDate);
         user.UpdateRefreshToken(user.RefreshToken);
@@ -101,6 +117,7 @@ public class UserManager : IUserManager
 
     public async Task<bool> ChangePasswordAsync(ChangePasswordDto dto)
     {
+        await _baseManager.ValidateAsync(dto);
         var user = await _baseManager.GetAsync(x => x.Id == dto.UserId && x.IsActivated);
         if (user == null) return false;
 
@@ -124,8 +141,13 @@ public class UserManager : IUserManager
 
     public async Task<bool> UpdateRoleAsync(UpdateRoleDto dto)
     {
+        await _baseManager.ValidateAsync(dto);
+        if (dto.UserId == _claimManager.GetCurrentUserId())
+            throw new AuthenticationException();
         var user = await _baseManager.GetAsync(x => x.Id == dto.UserId && x.IsActivated);
         if (user == null) return false;
+        if (user.Role == Role.SuperAdmin)
+            throw new AuthenticationException();
 
         user.UpdateRole(dto.Role);
         await _baseManager.Update(user);
@@ -136,46 +158,49 @@ public class UserManager : IUserManager
     public async Task<UserDto?> GetByEmailAsync(string email)
     {
         var user = await _baseManager.GetAsync(x => x.Email == email && x.IsActivated);
-        if (user == null) return null;
-
-        return new UserDto
-        {
-            Id = user.Id,
-            FirstName = user.FirstName,
-            LastName = user.LastName,
-            Email = user.Email,
-            Gender = user.Gender,
-            BirthDate = user.BirthDay,
-            Role = user.Role
-        };
+        if (user != null)
+            return _mapper.Map<UserDto>(user);
+        return null;
     }
 
-    private TokenResponseDto GenerateTokens(User user)
+    public async Task<UserDto?> GetCurrentUserAsync()
     {
-        var jwtSettings = _configuration.GetSection("JWTSettings");
-        var secret = jwtSettings["Secret"];
-        var expireAt = int.Parse(jwtSettings["ExpireAt"]); // minute type
+        var userId = _claimManager.GetCurrentUserId();
+        if (userId<=0)
+            return null;
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
-        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var user = await _baseManager.GetAsync(x=>x.Id==userId);
+        return user == null ? null : _mapper.Map<UserDto>(user);
+    }
 
-        var claims = new List<Claim>
+    public async Task<List<UserDto>> GetAllUsersAsync()
     {
-        new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-        new Claim(ClaimTypes.Email, user.Email),
-        new Claim(ClaimTypes.Role, user.Role.ToString())
-    };
+        var users = await _baseManager.GetAllAsync();
+        return _mapper.Map<List<UserDto>>(users);
+    }
 
-        var accessToken = new JwtSecurityToken(
-            expires: DateTime.UtcNow.AddMinutes(expireAt),
-            signingCredentials: creds,
-            claims: claims
-        );
+    public async Task<List<UserDto>> GetDeactivatedUsersAsync()
+    {
+        var users = await _baseManager.GetAllAsync();
+        var deactivatedUsers = users.Where(u => !u.IsActivated).ToList();
+        return _mapper.Map<List<UserDto>>(deactivatedUsers);
+    }
 
-        return new TokenResponseDto
-        {
-            AccessToken = new JwtSecurityTokenHandler().WriteToken(accessToken),
-            RefreshToken = Convert.ToBase64String(Guid.NewGuid().ToByteArray())
-        };
+    public async Task<List<UserDto>> GetSoftDeletedUsersAsync()
+    {
+        var users = await _baseManager.GetAllAsync();
+        var softDeletedUsers = users.Where(u => u.IsDeleted).ToList();
+        return _mapper.Map<List<UserDto>>(softDeletedUsers);
+    }
+
+    public async Task<bool> SetUserActivationStatusAsync(int userId, bool activate)
+    {
+        var user = await _baseManager.GetAsync(x=>x.Id==userId);
+        if (user == null)
+            return false;
+        user.GetActiveOrDeActive(activate);
+        await _baseManager.Update(user);
+        await _baseManager.Commit();
+        return true;
     }
 }

@@ -3,15 +3,20 @@ using BookStore.Application.Interfaces.IManagers;
 using BookStore.Persistence.Data;
 using Microsoft.EntityFrameworkCore;
 using LinqKit;
+using FluentValidation;
+using Microsoft.Extensions.DependencyInjection;
+using BookStore.Infrastructure.BaseMessages;
 
 namespace BookStore.Persistence.Managers;
 public class BaseManager<T> : IBaseManager<T> where T : class
 {
     private readonly AppDbContext _context;
+    private readonly IServiceProvider _serviceProvider;
 
-    public BaseManager(AppDbContext context)
+    public BaseManager(AppDbContext context, IServiceProvider serviceProvider)
     {
         _context = context;
+        _serviceProvider = serviceProvider;
     }
 
     public async Task AddAsync(T entity)
@@ -37,6 +42,7 @@ public class BaseManager<T> : IBaseManager<T> where T : class
         }
         return await (filter == null ? query.ToListAsync() : query.Where(filter).ToListAsync());
     }
+
     public async Task<T> GetAsync(Expression<Func<T, bool>>? filter = null, params string[]? includes)
     {
         IQueryable<T> query = _context.Set<T>();
@@ -64,6 +70,17 @@ public class BaseManager<T> : IBaseManager<T> where T : class
     public async Task Update(T entity)
     {
         _context.Set<T>().Update(entity);
+    }
+
+    public async Task ValidateAsync<TEntity>(TEntity dto) where TEntity : class
+    {
+        var validator = _serviceProvider.GetService<IValidator<TEntity>>();
+        if (validator is null)
+            throw new InvalidOperationException(UIMessage.GetNotFoundMessage($"Validator for {typeof(TEntity).Name}"));
+
+        var result = await validator.ValidateAsync(dto);
+        if (!result.IsValid)
+            throw new ValidationException(result.Errors);
     }
 
     public async Task<bool> IsPropertyUniqueAsync<TProperty>(Expression<Func<T, TProperty>> propertySelector, TProperty value, int id = 0)
@@ -105,6 +122,5 @@ public class BaseManager<T> : IBaseManager<T> where T : class
 
         await _context.SaveChangesAsync();
     }
-
 }
 

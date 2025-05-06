@@ -37,7 +37,7 @@ public class AuthorManager: IAuthorManager
     public async Task<bool> UpdateAsync(UpdateAuthorDto dto)
     {
         var author = await _baseManager.GetAsync(x=>x.Id==dto.Id);
-        if (author == null) throw new NotFoundException(UIMessage.GetNotFoundMessage("Author"));
+        if (author == null) throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Author"));
 
         await ValidateUpdateAuthorDto(dto);
         await EnsureAuthorDoesNotExist(dto);

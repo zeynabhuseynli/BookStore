@@ -31,8 +31,23 @@ public class AuthorEntityTypeConfiguration : IEntityTypeConfiguration<Author>
         builder.Property(x => x.IsDeleted)
                .HasDefaultValue(false);
 
-        builder.Property(a => a.DeletedDate)
-           .HasDefaultValue(null);
+        builder.Property(b => b.DeletedAt)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.DeletedById)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.UpdatedAt)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.UpdatedById)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.CreatedAt)
+            .IsRequired();
+
+        builder.Property(b => b.CreatedById)
+            .IsRequired();
 
         builder.Property(x => x.CreatedAt)
             .HasDefaultValueSql("CURRENT_TIMESTAMP");

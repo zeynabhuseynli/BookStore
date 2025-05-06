@@ -2,6 +2,7 @@
 using System.Net;
 using System.Text.Json;
 using BookStore.Application.Exceptions;
+using System.Security.Authentication;
 
 namespace BookStore.AdminPanel.Middleware;
 public class ExceptionHandlingMiddleware
@@ -38,9 +39,8 @@ public class ExceptionHandlingMiddleware
                 problemDetails.Detail = ex.Message;
                 problemDetails.Title = "Application Error";
                 break;
-
+            case InvalidOperationException:
             case KeyNotFoundException:
-            case NotFoundException:
                 response.StatusCode = (int)HttpStatusCode.NotFound;
                 problemDetails.Detail = ex.Message;
                 problemDetails.Title = "Not Found";
@@ -52,7 +52,7 @@ public class ExceptionHandlingMiddleware
                 problemDetails.Extensions.Add("invalidParams", exc.Errors);
                 problemDetails.Title = "Validation Error";
                 break;
-            case UnAuthorizedException:
+            case AuthenticationException:
                 response.StatusCode = (int)HttpStatusCode.Unauthorized;
                 problemDetails.Detail = ex.Message;
                 problemDetails.Title = "Unauthorized";

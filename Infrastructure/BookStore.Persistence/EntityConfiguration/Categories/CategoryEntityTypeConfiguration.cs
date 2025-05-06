@@ -18,8 +18,23 @@ public class CategoryEntityTypeConfiguration : IEntityTypeConfiguration<Category
         builder.Property(c => c.IsDeleted)
             .HasDefaultValue(false);
 
-        builder.Property(c => c.DeletedDate)
+        builder.Property(b => b.DeletedAt)
             .HasDefaultValue(null);
+
+        builder.Property(b => b.DeletedById)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.UpdatedAt)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.UpdatedById)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.CreatedAt)
+            .IsRequired();
+
+        builder.Property(b => b.CreatedById)
+            .IsRequired();
 
         builder.HasMany(c => c.BookCategories)
             .WithOne(bc => bc.Category)

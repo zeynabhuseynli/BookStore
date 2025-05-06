@@ -24,6 +24,7 @@
     <None Remove="Exceptions\" />
     <None Remove="DTOs\ReviewDtos\" />
     <None Remove="Validators\Reviews\" />
+    <None Remove="Validators\Users\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Interfaces\" />
@@ -43,6 +44,7 @@
     <Folder Include="Exceptions\" />
     <Folder Include="DTOs\ReviewDtos\" />
     <Folder Include="Validators\Reviews\" />
+    <Folder Include="Validators\Users\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.11.0" />

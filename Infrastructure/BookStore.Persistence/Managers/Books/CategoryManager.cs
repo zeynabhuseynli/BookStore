@@ -43,7 +43,7 @@ public class CategoryManager : ICategoryManager
         {
             var categ = await _baseManager.GetAsync(x=>x.Id==category.ParentCategoryId);
             if (categ == null)
-                throw new  NotFoundException(UIMessage.GetNotFoundMessage("ParentCategoryId"));
+                throw new  KeyNotFoundException(UIMessage.GetNotFoundMessage("ParentCategoryId"));
             category.ParentCategoryId = dto.ParentCategoryId;
         }
         await _baseManager.AddAsync(category);
@@ -69,7 +69,7 @@ public class CategoryManager : ICategoryManager
         {
             var categ = await _baseManager.GetAsync(x => x.Id == category.ParentCategoryId);
             if (categ == null)
-                throw new NotFoundException(UIMessage.GetNotFoundMessage("ParentCategoryId"));
+                throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("ParentCategoryId"));
             category.ParentCategoryId = dto.ParentCategoryId;
         }
         category.UpdatedAt = DateTime.UtcNow;
@@ -102,7 +102,7 @@ public class CategoryManager : ICategoryManager
         if (category.BookCategories != null && category.BookCategories.Any())
             throw new BadRequestException("Cannot delete category linked to books.");
 
-        category.DeletedDate = DateTime.UtcNow;
+        category.DeletedAt = DateTime.UtcNow;
         category.IsDeleted = true;
         await _baseManager.Update(category);
         await _baseManager.Commit();

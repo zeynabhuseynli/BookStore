@@ -15,6 +15,14 @@ public class UsersController : ControllerBase
         _userManager = userManager;
     }
 
+    [Authorize]
+    [HttpGet("profile")]
+    public async Task<IActionResult> GetProfile()
+    {
+        var result = await _userManager.GetCurrentUserAsync();
+        return (result != null) ? Ok(result) : Ok(new());
+    }
+
     [HttpPost("register")]
     public async Task<IActionResult> Register([FromBody] RegisterDto dto)
     {

@@ -1,6 +1,6 @@
-﻿using AutoMapper;
+﻿using System.Security.Authentication;
+using AutoMapper;
 using BookStore.Application.DTOs.ReviewDtos;
-using BookStore.Application.Exceptions;
 using BookStore.Application.Interfaces.IManagers;
 using BookStore.Application.Interfaces.IManagers.Helper;
 using BookStore.Domain.Entities.Reviews;
@@ -41,7 +41,7 @@ public class ReviewManager : IReviewManager
         if (review == null)
             throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Review"));
         if (review.FromUserId!=_claimManager.GetCurrentUserId())
-            throw new UnAuthorizedException("This is not your message.");
+            throw new AuthenticationException("This is not your message.");
         review.Message = dto.Message;
         review.Rating = dto.Rating;
         review.UpdatedAt = DateTime.UtcNow;
@@ -58,7 +58,7 @@ public class ReviewManager : IReviewManager
             throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Review"));
 
         review.IsDeleted = true;
-        review.DeletedDate = DateTime.UtcNow;
+        review.DeletedAt = DateTime.UtcNow;
 
         await _baseManager.Update(review);
         await _baseManager.Commit();

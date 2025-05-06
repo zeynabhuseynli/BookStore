@@ -12,8 +12,8 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
         builder.HasKey(u => u.Id);
 
         builder.Property(u => u.FirstName)
-             .IsRequired()
-             .HasMaxLength(100);
+            .IsRequired()
+            .HasMaxLength(100);
 
         builder.Property(u => u.LastName)
             .IsRequired()
@@ -27,51 +27,62 @@ public class UserEntityTypeConfiguration : IEntityTypeConfiguration<User>
             .IsUnique();
 
         builder.Property(u => u.Gender)
-               .IsRequired()
-               .HasConversion<string>();
+            .IsRequired()
+            .HasConversion<string>();
 
         builder.Property(u => u.Role)
-               .IsRequired()
-               .HasConversion<string>();
+            .IsRequired()
+            .HasConversion<string>();
 
         builder.Property(u => u.BirthDay)
-               .IsRequired();
+            .IsRequired();
 
         builder.Property(u => u.LoginCount)
-               .HasDefaultValue(0);
+            .HasDefaultValue(0);
 
         builder.Property(u => u.IsDeleted)
-               .HasDefaultValue(false);
+            .HasDefaultValue(false);
 
-        builder.Property(u => u.DeletedDate)
-               .HasDefaultValue(null);
+        builder.Property(b => b.DeletedAt)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.DeletedById)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.UpdatedAt)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.UpdatedById)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.CreatedAt)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.CreatedById)
+            .HasDefaultValue(null);
 
         builder.Property(u => u.IsActivated)
-               .HasDefaultValue(false);
+            .HasDefaultValue(false);
 
         builder.Property(u => u.RefreshToken)
-              .HasDefaultValue(null);
+            .HasDefaultValue(null);
 
         builder.Property(u => u.PasswordHash)
             .IsRequired();
 
         builder.Property(u => u.PasswordResetOtp)
-               .HasDefaultValue(null);
+            .HasDefaultValue(null);
 
         builder.Property(u => u.PasswordResetOtpDate)
-             .HasDefaultValue(null); 
+            .HasDefaultValue(null);
 
         builder.Property(u => u.ResetPasswordDate)
-               .HasDefaultValue(null);
+            .HasDefaultValue(null);
 
         builder.HasMany(u => u.Reviews)
             .WithOne(r => r.User)
             .HasForeignKey(r => r.FromUserId)
             .OnDelete(DeleteBehavior.Restrict);
-
-        builder.Property(x => x.CreatedAt)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP");
-
     }
 }
 

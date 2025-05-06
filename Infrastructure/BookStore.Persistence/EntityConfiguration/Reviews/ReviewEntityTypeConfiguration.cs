@@ -24,6 +24,27 @@ public class ReviewEntityTypeConfiguration : IEntityTypeConfiguration<Review>
         builder.Property(u => u.Rating)
             .HasConversion<int>();
 
+        builder.Property(x => x.IsDeleted)
+              .HasDefaultValue(false);
+
+        builder.Property(b => b.DeletedAt)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.DeletedById)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.UpdatedAt)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.UpdatedById)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.CreatedAt)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.CreatedById)
+            .HasDefaultValue(null);
+
         builder.HasOne(r => r.User)
                .WithMany(u => u.Reviews)
                .HasForeignKey(r => r.FromUserId)
@@ -34,15 +55,13 @@ public class ReviewEntityTypeConfiguration : IEntityTypeConfiguration<Review>
                .HasForeignKey(r => r.ToUserId)
                .OnDelete(DeleteBehavior.Restrict)
                .IsRequired(false);
+
         builder.HasOne(r => r.Book)
                .WithMany(b => b.Reviews)
                .HasForeignKey(r => r.BookId)
                .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasIndex(r => new { r.FromUserId, r.ToUserId });
-
-        builder.Property(x => x.CreatedAt)
-            .HasDefaultValueSql("CURRENT_TIMESTAMP");
     }
 }
 

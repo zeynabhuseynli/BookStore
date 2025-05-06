@@ -106,7 +106,7 @@ public class BookManager : IBookManager
         AuthorId = aid
     }));
         book.IsDeleted = false;
-        book.DeletedDate = null;
+        book.DeletedAt = null;
         book.UpdatedAt = DateTime.UtcNow;
         await _baseManager.Update(book);
         await _baseManager.Commit();
@@ -131,7 +131,7 @@ public class BookManager : IBookManager
         if (book == null)
             throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Book"));
 
-        book.DeletedDate = DateTime.UtcNow;
+        book.DeletedAt = DateTime.UtcNow;
         book.IsDeleted = true;
         await _baseManager.Update(book);
         await _baseManager.Commit();

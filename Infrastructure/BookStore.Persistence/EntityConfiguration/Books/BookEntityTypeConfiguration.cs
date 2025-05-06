@@ -48,8 +48,23 @@ public class BookEntityTypeConfiguration : IEntityTypeConfiguration<Book>
         builder.Property(x => x.IsDeleted)
                .HasDefaultValue(false);
 
-        builder.Property(b => b.DeletedDate)
+        builder.Property(b => b.DeletedAt)
             .HasDefaultValue(null);
+
+        builder.Property(b => b.DeletedById)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.UpdatedAt)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.UpdatedById)
+            .HasDefaultValue(null);
+
+        builder.Property(b => b.CreatedAt)
+            .IsRequired();
+
+        builder.Property(b => b.CreatedById)
+            .IsRequired();
 
         builder.HasMany(b => b.Reviews)
            .WithOne(r => r.Book)

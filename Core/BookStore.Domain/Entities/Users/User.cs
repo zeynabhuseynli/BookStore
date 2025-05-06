@@ -39,13 +39,13 @@ public class User : BaseEntity
     {
         LoginCount = 0;
         IsDeleted = false;
-        DeletedDate = null;
+        DeletedAt = null;
     }
 
     public void SetForSoftDelete()
     {
         IsDeleted = true;
-        DeletedDate = DateTime.UtcNow;
+        DeletedAt = DateTime.UtcNow;
         UpdateRefreshToken(null);
     }
     public void SetDetailsForUpdate(string firstName, string lastName, string email, Gender gender, DateTime dateTime)
@@ -94,6 +94,7 @@ public class User : BaseEntity
     {
         RefreshToken = refreshToken;
     }
+
 }
 
 

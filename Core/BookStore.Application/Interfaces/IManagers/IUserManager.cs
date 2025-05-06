@@ -1,4 +1,5 @@
 ﻿using BookStore.Application.DTOs.UserDtos;
+using BookStore.Infrastructure.Utils;
 
 namespace BookStore.Application.Interfaces.IManagers;
 public interface IUserManager
@@ -12,5 +13,11 @@ public interface IUserManager
     Task<bool> SoftDeleteAsync(int userId);
     Task<bool> UpdateRoleAsync(UpdateRoleDto dto);
     Task<UserDto?> GetByEmailAsync(string email);
+    Task<List<UserDto>> GetSoftDeletedUsersAsync();
+    Task<UserDto?> GetCurrentUserAsync();
+    Task<List<UserDto>> GetAllUsersAsync();
+    Task<List<UserDto>> GetDeactivatedUsersAsync();
+    Task<bool> SetUserActivationStatusAsync(int userId, bool activate);
+
 }
 

@@ -1,34 +1,60 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using BookStore.Application.DTOs.UserDtos;
 using BookStore.Application.Interfaces.IManagers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-// For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-
-namespace BookStore.AdminPanel.Controllers
+namespace BookStore.AdminPanel.Controllers;
+[Route("api/admin/[controller]")]
+[ApiController]
+[Authorize(Roles = "Admin, SuperAdmin")]
+public class UsersController : Controller
 {
-    [Route("api/admin/[controller]")]
-    [ApiController]
-    public class UsersController : Controller
+    private readonly IUserManager _userManager;
+
+    public UsersController(IUserManager userManager)
     {
-        private readonly IUserManager _userManager;
+        _userManager = userManager;
+    }
+    [HttpGet("get_user")]
+    public async Task<IActionResult> GetUserByEmail(string email)
+    {
+        var result= await _userManager.GetByEmailAsync(email);
+        return (result!=null) ? Ok(result):Ok(new());
+    }
 
-        public UsersController(IUserManager userManager)
-        {
-            _userManager = userManager;
-        }
+    [HttpGet("users")]
+    public async Task<IActionResult> GetUsers()
+    {
+        var results = await _userManager.GetAllUsersAsync();
+        return (results != null) ? Ok(results) : Ok(new());
+    }
 
-        [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> SoftDelete(int id)
-        {
-            var result = await _userManager.SoftDeleteAsync(id);
-            if (result) return Ok();
-            return NotFound();
-        }
+    [HttpGet("deactive_users")]
+    public async Task<IActionResult> GetDeactiveUsers()
+    {
+        var results = await _userManager.GetDeactivatedUsersAsync();
+        return (results != null) ? Ok(results) : Ok(new());
+    }
+
+    [HttpGet("deleted_users")]
+    public async Task<IActionResult> GetDeletedUsers()
+    {
+        var results = await _userManager.GetSoftDeletedUsersAsync();
+        return (results != null) ? Ok(results) : Ok(new());
+    }
+
+    [HttpPut("{userId}")]
+    public async Task<IActionResult> SetUserActivationStatus(int userId,bool isActivated)
+    {
+        var results = await _userManager.SetUserActivationStatusAsync(userId, isActivated);
+        return results ? Ok() : BadRequest();
+    }
+
+    [HttpPut("update_role")]
+    public async Task<IActionResult> ChangeUserRole(UpdateRoleDto dto)
+    {
+        var results = await _userManager.UpdateRoleAsync(dto);
+        return results ? Ok() : BadRequest();
     }
 }
 
