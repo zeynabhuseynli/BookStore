@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "FcezDSeor05vHMnJ3uasHpRjawZFWI8SofmjDgCcv3g=",
+  "Hash": "qTC19CaJqxyc1YbnLED5PlL3tgyYeqaP8MvMImkPL80=",
   "Source": "BookStore.API",
   "BasePath": "_content/BookStore.API",
   "Mode": "Default",
@@ -11,10 +11,10 @@
       "Version": 2,
       "Source": "BookStore.AdminPanel",
       "GetPublishAssetsTargets": "ComputeReferencedStaticWebAssetsPublishManifest;GetCurrentProjectPublishStaticWebAssetItems",
-      "AdditionalPublishProperties": "",
+      "AdditionalPublishProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalPublishPropertiesToRemove": "TargetFramework",
       "GetBuildAssetsTargets": "GetCurrentProjectBuildStaticWebAssetItems",
-      "AdditionalBuildProperties": "",
+      "AdditionalBuildProperties": "Configuration=Debug;Platform=AnyCPU",
       "AdditionalBuildPropertiesToRemove": "TargetFramework"
     }
   ],

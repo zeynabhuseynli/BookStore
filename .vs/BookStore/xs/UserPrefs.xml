@@ -1,10 +1,8 @@
-﻿<Properties StartupConfiguration="{5142A44E-C656-4268-B57B-2971B82A9C72}|https">
+﻿<Properties StartupConfiguration="{5142A44E-C656-4268-B57B-2971B82A9C72}|https" GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/zeyneb/Projects/BookStore/BookStore.API/Controllers/CategoriesController.cs" relfile="BookStore.API/Controllers/CategoriesController.cs" line="38" column="1" />
-      <Breakpoint file="/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/Managers/Helper/BaseManager.cs" relfile="Infrastructure/BookStore.Persistence/Managers/Helper/BaseManager.cs" line="91" column="1" />
-      <Breakpoint file="/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/Managers/Books/CategoryManager.cs" relfile="Infrastructure/BookStore.Persistence/Managers/Books/CategoryManager.cs" line="118" column="1" />
-    </BreakpointStore>
+    <Breakpoint file="/Users/zeyneb/Projects/BookStore/BookStore.API/Controllers/CategoriesController.cs" relfile="BookStore.API/Controllers/CategoriesController.cs" line="38" column="1" />
+    <Breakpoint file="/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/Managers/Helper/BaseManager.cs" relfile="Infrastructure/BookStore.Persistence/Managers/Helper/BaseManager.cs" line="91" column="1" />
+    <Breakpoint file="/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/Managers/Books/CategoryManager.cs" relfile="Infrastructure/BookStore.Persistence/Managers/Books/CategoryManager.cs" line="118" column="1" />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.ItemProperties.BookStore.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Infrastructure/BookStore.Persistence/EntityConfiguration/Reviews/ReviewEntityTypeConfiguration.cs">

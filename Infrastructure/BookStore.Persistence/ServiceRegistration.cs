@@ -5,6 +5,7 @@ using BookStore.Persistence.Data;
 using BookStore.Persistence.Managers;
 using BookStore.Persistence.Managers.Books;
 using BookStore.Persistence.Managers.Helper;
+using BookStore.Persistence.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,6 +34,7 @@ public static class ServiceRegistration
         services.AddScoped<IReviewManager, ReviewManager>();
 
         services.AddTransient<IEmailManager, EmailManager>();
+        services.AddHostedService<HardDeleteBacgroundJob>();
     }
 }
 
