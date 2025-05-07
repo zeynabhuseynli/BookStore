@@ -30,7 +30,7 @@ public class BaseManager<T> : IBaseManager<T> where T : BaseEntity
         await _context.Set<T>().AddAsync(entity);
     }
 
-    public void HardDelete<TEntity>(TEntity entity) where TEntity : BaseEntity
+    public void HardDelete<TEntity>(TEntity entity) where TEntity : class
     {
         _context.Set<TEntity>().Remove(entity);
     }
@@ -53,6 +53,23 @@ public class BaseManager<T> : IBaseManager<T> where T : BaseEntity
         foreach (var entity in entities)
         {
             SoftDelete(entity, currentUserId);
+            Update(entity);
+        }
+        return true;
+    }
+
+    public void Recover<TEntity>(TEntity entity) where TEntity : BaseEntity
+    {
+        entity.IsDeleted = false;
+        entity.DeletedAt = null;
+        entity.DeletedById = null;
+    }
+
+    public bool RecoveryRange<TEntity>(IEnumerable<TEntity> entities, int currentUserId) where TEntity : BaseEntity
+    {
+        foreach (var entity in entities)
+        {
+            Recover(entity);
             Update(entity, currentUserId);
         }
         return true;
@@ -60,9 +77,9 @@ public class BaseManager<T> : IBaseManager<T> where T : BaseEntity
 
     public void Update<TEntity>(TEntity entity, int? currentUserId = null) where TEntity : BaseEntity
     {
-        entity.UpdatedAt = DateTime.UtcNow;
         if (currentUserId != null)
         {
+            entity.UpdatedAt = DateTime.UtcNow;
             entity.UpdatedById = currentUserId;
         }
         _context.Set<TEntity>().Update(entity);

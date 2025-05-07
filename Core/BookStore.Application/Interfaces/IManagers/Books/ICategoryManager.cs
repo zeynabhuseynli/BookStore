@@ -11,7 +11,8 @@ public interface ICategoryManager
 
     Task<IEnumerable<CategoryDto>> GetSubCategoriesByCategoryIdAsync(int categoryId);
     Task<IEnumerable<BookDto>> GetBooksBySubCategoryIdAsync(int subCategoryId);
-    Task<bool> DeleteCategoryWithDependenciesAsync(int categoryId);
+    Task<bool> SoftDeleteCategoryWithDependenciesAsync(int categoryId);
+    Task<bool> RecoverCategoryWithDependenciesAsync(int categoryId);
     Task<IEnumerable<CategoryDto>> GetDeletedCategoriesAsync();
 
 

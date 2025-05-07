@@ -14,14 +14,12 @@ public class CategoryManager : ICategoryManager
     private readonly IMapper _mapper;
     private readonly IBaseManager<Category> _baseManager;
     private readonly IClaimManager _claimManager;
-    private readonly IBookFileManager _fileManager;
 
-    public CategoryManager(IMapper mapper, IBaseManager<Category> baseManager, IClaimManager claimManager, IBookFileManager fileManager)
+    public CategoryManager(IMapper mapper, IBaseManager<Category> baseManager, IClaimManager claimManager)
     {
         _mapper = mapper;
         _baseManager = baseManager;
         _claimManager = claimManager;
-        _fileManager = fileManager;
     }
 
     public async Task<bool> CreateAsync(CreateCategoryDto dto)
@@ -138,7 +136,7 @@ public class CategoryManager : ICategoryManager
         return _mapper.Map<IEnumerable<CategoryDto>>(categories);
     }
 
-    public async Task<bool> DeleteCategoryWithDependenciesAsync(int categoryId)
+    public async Task<bool> SoftDeleteCategoryWithDependenciesAsync(int categoryId)
     {
         var category = await _baseManager.GetAsync(x => x.Id == categoryId,
             nameof(Category.SubCategories),
@@ -152,7 +150,7 @@ public class CategoryManager : ICategoryManager
         {
             foreach (var sub in category.SubCategories)
             {
-                await DeleteCategoryWithDependenciesAsync(sub.Id);
+                await SoftDeleteCategoryWithDependenciesAsync(sub.Id);
             }
         }
 
@@ -160,21 +158,68 @@ public class CategoryManager : ICategoryManager
         {
             foreach (var bc in category.BookCategories)
             {
+                var cat = bc.Category;
+                if (cat!=null)
+                {
+                    _baseManager.SoftDelete(cat, _claimManager.GetCurrentUserId());
+                    _baseManager.Update(cat);
+                }
                 var book = bc.Book;
                 if (book != null)
                 {
-                    _fileManager.DeleteFileIfExists(book.CoverPath);
-                    _fileManager.DeleteFileIfExists(book.Path);
-
-                    book.IsDeleted = true;
-                    book.DeletedById = _claimManager.GetCurrentUserId();
-                    book.DeletedAt = DateTime.UtcNow;
+                    _baseManager.SoftDelete(book, _claimManager.GetCurrentUserId());
+                    _baseManager.Update(book);
                 }
             }
         }
 
         _baseManager.SoftDelete(category, _claimManager.GetCurrentUserId());
-        _baseManager.Update(category, _claimManager.GetCurrentUserId());
+        _baseManager.Update(category);
+        await _baseManager.Commit();
+
+        return true;
+    }
+
+    public async Task<bool> RecoverCategoryWithDependenciesAsync(int categoryId)
+    {
+        var category = await _baseManager.GetAsync(x => x.Id == categoryId,
+            nameof(Category.SubCategories),
+            nameof(Category.BookCategories),
+            nameof(Category.BookCategories) + "." + nameof(BookCategory.Book));
+
+        if (category == null)
+            throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Category"));
+
+        if (category.SubCategories != null)
+        {
+            foreach (var sub in category.SubCategories)
+            {
+                await RecoverCategoryWithDependenciesAsync(sub.Id);
+            }
+        }
+
+        if (category.BookCategories != null)
+        {
+            foreach (var bc in category.BookCategories)
+            {
+
+                var cat = bc.Category;
+                if (cat != null)
+                {
+                    _baseManager.Recover(cat);
+                    _baseManager.Update(cat);
+                }
+                var book = bc.Book;
+                if (book != null)
+                {
+                    _baseManager.Recover(book);
+                    _baseManager.Update(book);
+                }
+            }
+        }
+
+        _baseManager.Recover(category);
+        _baseManager.Update(category);
         await _baseManager.Commit();
 
         return true;
@@ -189,4 +234,3 @@ public class CategoryManager : ICategoryManager
         }
     }
 }
-

@@ -3,7 +3,6 @@ using BookStore.Infrastructure.BaseMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace BookStore.AdminPanel.Controllers;
 [Route("api/admin/[controller]")]
 [ApiController]
@@ -31,6 +30,5 @@ public class ReviewsController : Controller
         await _reviewManager.DeleteReviewWithRepliesAsync(id,false);
         return Ok(UIMessage.UPDATE_MESSAGE);
     }
-
 }
 

@@ -134,8 +134,8 @@ public class ReviewManager : IReviewManager
         }
         else
         {
-            review.DeletedById = null;
-            review.DeletedAt = null;
+            _baseManager.Recover(review);
+            _baseManager.RecoverRange(review.Replies, _claimManager.GetCurrentUserId());
         }
 
         _baseManager.Update(review, _claimManager.GetCurrentUserId());
