@@ -39,6 +39,8 @@ public class UserManager : IUserManager
         if (!isEmailUnique)
             throw new BadRequestException(UIMessage.GetUniqueNamedMessage("Email"));
 
+        PasswordHasher.EnsureSecurePasswordOrThrow(dto.Password);
+
         var user = new User();
         user.SetDetailsForRegister(dto.FirstName, dto.LastName, dto.Email, dto.BirthDay, dto.Password);
         await _baseManager.AddAsync(user);
@@ -93,10 +95,15 @@ public class UserManager : IUserManager
 
     public async Task<bool> ResetPasswordWithOtpAsync(ResetPasswordDto dto)
     {
+        PasswordHasher.EnsureSecurePasswordOrThrow(dto.NewPassword);
+
         await _baseManager.ValidateAsync(dto);
         var user = await _baseManager.GetAsync(x => x.Email == dto.Email && x.IsActivated);
         if (user == null || user.PasswordResetOtp != dto.OtpCode || user.PasswordResetOtpDate < DateTime.UtcNow)
             return false;
+
+        if (user.PasswordHash == PasswordHasher.HashPassword(dto.NewPassword))
+            throw new ArgumentException("Keçmiş parol ile eyni parolu yazmaq olmaz");
 
         user.ResetPassword(PasswordHasher.HashPassword(dto.NewPassword));
         _baseManager.Update(user);
@@ -121,9 +128,14 @@ public class UserManager : IUserManager
 
     public async Task<bool> ChangePasswordAsync(ChangePasswordDto dto)
     {
+        PasswordHasher.EnsureSecurePasswordOrThrow(dto.NewPassword);
+
         await _baseManager.ValidateAsync(dto);
         var user = await _baseManager.GetAsync(x => x.Id == dto.UserId && x.IsActivated);
         if (user == null) return false;
+
+        if (user.PasswordHash == PasswordHasher.HashPassword(dto.NewPassword))
+            throw new ArgumentException("Keçmiş parol ile eyni parolu yazmaq olmaz");
 
         user.SetPasswordHash(PasswordHasher.HashPassword(dto.NewPassword));
         user.UpdateRefreshToken(user.RefreshToken);

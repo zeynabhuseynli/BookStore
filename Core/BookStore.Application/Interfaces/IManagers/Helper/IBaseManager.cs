@@ -10,9 +10,9 @@ public interface IBaseManager<T> where T : BaseEntity
     void HardDelete<TEntity>(TEntity entity) where TEntity : class;
     bool HardRemoveRange(IEnumerable<T> entities);
     void SoftDelete<TEntity>(TEntity entity, int? currentUserId = null) where TEntity : BaseEntity;
-    void Recover<TEntity>(TEntity entity) where TEntity : BaseEntity;
-    void RecoverRange<TEntity>(IEnumerable<TEntity> entities, int currentUserId) where TEntity : BaseEntity;
     bool SoftRemoveRange<TEntity>(IEnumerable<TEntity> entities, int currentUserId) where TEntity : BaseEntity;
+    void Recover<TEntity>(TEntity entity) where TEntity : BaseEntity;
+    bool RecoverRange<TEntity>(IEnumerable<TEntity> entities, int currentUserId) where TEntity : BaseEntity;
     Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>>? filter = null, params string[]? includes);
     Task<T> GetAsync(Expression<Func<T, bool>>? filter = null, params string[]? includes);
     Task ValidateAsync<TEntity>(TEntity dto) where TEntity : class;

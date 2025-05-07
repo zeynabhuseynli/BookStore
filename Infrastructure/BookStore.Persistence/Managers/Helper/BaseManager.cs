@@ -65,7 +65,7 @@ public class BaseManager<T> : IBaseManager<T> where T : BaseEntity
         entity.DeletedById = null;
     }
 
-    public bool RecoveryRange<TEntity>(IEnumerable<TEntity> entities, int currentUserId) where TEntity : BaseEntity
+    public bool RecoverRange<TEntity>(IEnumerable<TEntity> entities, int currentUserId) where TEntity : BaseEntity
     {
         foreach (var entity in entities)
         {
