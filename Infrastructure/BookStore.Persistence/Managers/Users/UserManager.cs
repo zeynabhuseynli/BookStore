@@ -99,8 +99,12 @@ public class UserManager : IUserManager
 
         await _baseManager.ValidateAsync(dto);
         var user = await _baseManager.GetAsync(x => x.Email == dto.Email && x.IsActivated);
-        if (user == null || user.PasswordResetOtp != dto.OtpCode || user.PasswordResetOtpDate < DateTime.UtcNow)
+       
+        if (user == null || user.PasswordResetOtp != dto.OtpCode )
             return false;
+
+        if (DateTime.UtcNow.AddMinutes(-20) > user.PasswordResetOtpDate || user.PasswordResetOtpDate > DateTime.UtcNow)
+            throw new InvalidDataException("Otp codun vaxti keçmişdir ve ya sehvdir");
 
         if (user.PasswordHash == PasswordHasher.HashPassword(dto.NewPassword))
             throw new ArgumentException("Keçmiş parol ile eyni parolu yazmaq olmaz");

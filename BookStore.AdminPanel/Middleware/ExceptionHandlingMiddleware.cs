@@ -40,6 +40,7 @@ public class ExceptionHandlingMiddleware
                 problemDetails.Title = "Application Error";
                 break;
             case InvalidOperationException:
+            case InvalidDataException:
             case KeyNotFoundException:
                 response.StatusCode = (int)HttpStatusCode.NotFound;
                 problemDetails.Detail = ex.Message;
