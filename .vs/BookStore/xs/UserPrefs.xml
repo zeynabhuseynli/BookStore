@@ -1,35 +1,50 @@
 ﻿<Properties StartupConfiguration="{5142A44E-C656-4268-B57B-2971B82A9C72}|https">
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/zeyneb/Projects/BookStore/BookStore.API/Controllers/CategoriesController.cs" relfile="BookStore.API/Controllers/CategoriesController.cs" line="38" column="1" />
+      <Breakpoint file="/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/Managers/Helper/BaseManager.cs" relfile="Infrastructure/BookStore.Persistence/Managers/Helper/BaseManager.cs" line="91" column="1" />
+      <Breakpoint file="/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/Managers/Books/CategoryManager.cs" relfile="Infrastructure/BookStore.Persistence/Managers/Books/CategoryManager.cs" line="118" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Infrastructure/BookStore.Infrastructure/Utils/PasswordHasher.cs">
+  <MonoDevelop.Ide.ItemProperties.BookStore.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Infrastructure/BookStore.Persistence/EntityConfiguration/Reviews/ReviewEntityTypeConfiguration.cs">
     <Files>
-      <File FileName="Infrastructure/BookStore.Persistence/Managers/Users/UserManager.cs" Line="57" Column="33" />
-      <File FileName="Infrastructure/BookStore.Infrastructure/Utils/PasswordHasher.cs" Line="15" Column="31" />
+      <File FileName="BookStore.API/Controllers/CategoriesController.cs" Line="40" Column="1" />
+      <File FileName="Infrastructure/BookStore.Persistence/Managers/Books/CategoryManager.cs" Line="119" Column="1" />
+      <File FileName="Infrastructure/BookStore.Persistence/Managers/Helper/BaseManager.cs" Line="101" Column="1" />
+      <File FileName="Infrastructure/BookStore.Persistence/Data/AppDbContext.cs" Line="24" Column="1" />
+      <File FileName="Infrastructure/BookStore.Persistence/EntityConfiguration/Books/AuthorEntityTypeConfiguration.cs" Line="10" Column="33" />
+      <File FileName="Infrastructure/BookStore.Persistence/EntityConfiguration/Books/BookAuthorEntityTypeConfiguration.cs" Line="23" Column="1" />
+      <File FileName="Infrastructure/BookStore.Persistence/EntityConfiguration/Books/BookEntityTypeConfiguration.cs" Line="77" Column="1" />
+      <File FileName="Infrastructure/BookStore.Persistence/EntityConfiguration/Categories/BookCategoryEntityTypeConfiguration.cs" Line="23" Column="1" />
+      <File FileName="Infrastructure/BookStore.Persistence/EntityConfiguration/Categories/CategoryEntityTypeConfiguration.cs" Line="46" Column="1" />
+      <File FileName="Infrastructure/BookStore.Persistence/EntityConfiguration/Reviews/ReviewEntityTypeConfiguration.cs" Line="10" Column="27" />
+      <File FileName="Infrastructure/BookStore.Persistence/EntityConfiguration/Users/UserEntityTypeConfiguration.cs" Line="86" Column="1" />
+      <File FileName="BookStore.AdminPanel/Middleware/ExceptionHandlingMiddleware.cs" Line="21" Column="1" />
+      <File FileName="BookStore.API/Controllers/BookController.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="BookStore" expanded="True">
-            <Node name="Core" expanded="True">
-              <Node name="BookStore.Application" expanded="True">
-                <Node name="Interfaces" expanded="True" />
-              </Node>
-            </Node>
             <Node name="Infrastructure" expanded="True">
-              <Node name="BookStore.Infrastructure">
-                <Node name="Utils" expanded="True">
-                  <Node name="PasswordHasher.cs" selected="True" />
-                </Node>
-              </Node>
               <Node name="BookStore.Persistence">
-                <Node name="Managers" expanded="True">
+                <Node name="Data" expanded="True" />
+                <Node name="EntityConfiguration" expanded="True">
+                  <Node name="Books" expanded="True" />
+                  <Node name="Categories" expanded="True" />
+                  <Node name="Reviews" expanded="True">
+                    <Node name="ReviewEntityTypeConfiguration.cs" selected="True" />
+                  </Node>
                   <Node name="Users" expanded="True" />
                 </Node>
+                <Node name="Managers" expanded="True">
+                  <Node name="Books" expanded="True" />
+                  <Node name="Helper" expanded="True" />
+                </Node>
               </Node>
             </Node>
-            <Node name="BookStore.AdminPanel">
+            <Node name="BookStore.AdminPanel" expanded="True">
               <Node name="Middleware" expanded="True" />
             </Node>
           </Node>
@@ -37,7 +52,7 @@
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MultiItemStartupConfigurations />
   <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.ItemProperties.BookStore.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MultiItemStartupConfigurations />
 </Properties>

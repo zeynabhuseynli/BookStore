@@ -6,9 +6,10 @@ using LinqKit;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 using BookStore.Infrastructure.BaseMessages;
+using BookStore.Domain.Common;
 
 namespace BookStore.Persistence.Managers;
-public class BaseManager<T> : IBaseManager<T> where T : class
+public class BaseManager<T> : IBaseManager<T> where T : BaseEntity
 {
     private readonly AppDbContext _context;
     private readonly IServiceProvider _serviceProvider;
@@ -19,9 +20,52 @@ public class BaseManager<T> : IBaseManager<T> where T : class
         _serviceProvider = serviceProvider;
     }
 
-    public async Task AddAsync(T entity)
+    public async Task AddAsync(T entity, int? currentUserId)
     {
+        entity.CreatedAt = DateTime.UtcNow;
+        if (currentUserId != null)
+        {
+            entity.CreatedById = currentUserId;
+        }
         await _context.Set<T>().AddAsync(entity);
+    }
+
+    public void HardDelete<TEntity>(TEntity entity) where TEntity : BaseEntity
+    {
+        _context.Set<TEntity>().Remove(entity);
+    }
+
+    public bool HardRemoveRange(IEnumerable<T> entities)
+    {
+        _context.Set<T>().RemoveRange(entities);
+        return true;
+    }
+
+    public void SoftDelete<TEntity>(TEntity entity, int? currentUserId = null) where TEntity : BaseEntity
+    {
+        entity.IsDeleted = true;
+        entity.DeletedAt = DateTime.UtcNow;
+        entity.DeletedById = currentUserId;
+    }
+
+    public bool SoftRemoveRange<TEntity>(IEnumerable<TEntity> entities, int currentUserId) where TEntity : BaseEntity
+    {
+        foreach (var entity in entities)
+        {
+            SoftDelete(entity, currentUserId);
+            Update(entity, currentUserId);
+        }
+        return true;
+    }
+
+    public void Update<TEntity>(TEntity entity, int? currentUserId = null) where TEntity : BaseEntity
+    {
+        entity.UpdatedAt = DateTime.UtcNow;
+        if (currentUserId != null)
+        {
+            entity.UpdatedById = currentUserId;
+        }
+        _context.Set<TEntity>().Update(entity);
     }
 
     public async Task Commit()
@@ -57,21 +101,6 @@ public class BaseManager<T> : IBaseManager<T> where T : class
         return await (filter == null ? query.FirstOrDefaultAsync() : query.FirstOrDefaultAsync(filter));
     }
 
-    public async Task HardDelete(T entity)
-    {
-        _context.Set<T>().Remove(entity);
-    }
-
-    public async Task RemoveRange(IEnumerable<T> entities)
-    {
-        _context.Set<T>().RemoveRange(entities);
-    }
-
-    public async Task Update(T entity)
-    {
-        _context.Set<T>().Update(entity);
-    }
-
     public async Task ValidateAsync<TEntity>(TEntity dto) where TEntity : class
     {
         var validator = _serviceProvider.GetService<IValidator<TEntity>>();
@@ -98,7 +127,7 @@ public class BaseManager<T> : IBaseManager<T> where T : class
             predicate = predicate.And(e => EF.Property<int>(e, "Id") != id);
         }
 
-        return !await dbSet.Where(predicate).AnyAsync(); 
+        return !await dbSet.Where(predicate).AnyAsync();
     }
 
     public async Task SyncManyToMany<TJoinEntity>(

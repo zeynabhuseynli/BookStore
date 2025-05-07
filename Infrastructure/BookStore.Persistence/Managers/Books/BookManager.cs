@@ -3,42 +3,39 @@ using AutoMapper;
 using BookStore.Application.DTOs.BookDtos;
 using BookStore.Application.Interfaces.IManagers;
 using BookStore.Application.Interfaces.IManagers.Books;
+using BookStore.Application.Interfaces.IManagers.Helper;
 using BookStore.Domain.Entities.Authors;
 using BookStore.Domain.Entities.Books;
 using BookStore.Domain.Entities.Categories;
 using BookStore.Domain.Entities.Users;
 using BookStore.Infrastructure.BaseMessages;
-using FluentValidation;
 
 namespace BookStore.Persistence.Managers.Books;
 public class BookManager : IBookManager
 {
     private readonly IMapper _mapper;
     private readonly IBaseManager<Book> _baseManager;
-    private readonly IValidator<CreateBookDto> _createValidator;
-    private readonly IValidator<UpdateBookDto> _updateValidator;
     private readonly IEmailManager _emailManager;
+    private readonly IClaimManager _claimManager;
     private readonly IBookFileManager _fileManager;
 
     public BookManager(
         IMapper mapper,
         IBaseManager<Book> baseManager,
-        IValidator<CreateBookDto> createValidator,
-        IValidator<UpdateBookDto> updateValidator,
+        IClaimManager claimManager,
         IEmailManager emailManager,
         IBookFileManager fileManager)
     {
         _mapper = mapper;
         _baseManager = baseManager;
-        _createValidator = createValidator;
-        _updateValidator = updateValidator;
+        _claimManager = claimManager;
         _emailManager = emailManager;
         _fileManager = fileManager;
     }
 
     public async Task<bool> CreateAsync(CreateBookDto dto)
     {
-        await ValidateCreateDto(dto);
+        await _baseManager.ValidateAsync(dto);
 
         var (pdfPath, imagePath) = await _fileManager.UploadBookFilesAsync(dto.PdfFile, dto.CoverImage);
 
@@ -56,7 +53,7 @@ public class BookManager : IBookManager
             book.Authors.Add(new BookAuthor { AuthorId = authorId });
         }
 
-        await _baseManager.AddAsync(book);
+        await _baseManager.AddAsync(book,_claimManager.GetCurrentUserId());
         await _baseManager.Commit();
 
         // Email göndərmək
@@ -68,7 +65,7 @@ public class BookManager : IBookManager
 
     public async Task<bool> UpdateAsync(UpdateBookDto dto)
     {
-        await ValidateUpdateDto(dto);
+        await _baseManager.ValidateAsync(dto);
 
         var book = await _baseManager.GetAsync(x => x.Id == dto.Id,"Authors", "BookCategories");
         if (book == null) throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Book"));
@@ -105,10 +102,8 @@ public class BookManager : IBookManager
         BookId = book.Id,
         AuthorId = aid
     }));
-        book.IsDeleted = false;
-        book.DeletedAt = null;
-        book.UpdatedAt = DateTime.UtcNow;
-        await _baseManager.Update(book);
+        _baseManager.SoftDelete(book,_claimManager.GetCurrentUserId());
+        _baseManager.Update(book, _claimManager.GetCurrentUserId());
         await _baseManager.Commit();
         return true;
     }
@@ -131,32 +126,15 @@ public class BookManager : IBookManager
         if (book == null)
             throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Book"));
 
-        book.DeletedAt = DateTime.UtcNow;
-        book.IsDeleted = true;
-        await _baseManager.Update(book);
+        _baseManager.SoftDelete(book,_claimManager.GetCurrentUserId());
+        _baseManager.Update(book, _claimManager.GetCurrentUserId());
         await _baseManager.Commit();
         return true;
-    }
-
-    #region Helpers
-    private async Task ValidateCreateDto(CreateBookDto dto)
-    {
-        var result = await _createValidator.ValidateAsync(dto);
-        if (!result.IsValid)
-            throw new Application.Exceptions.ValidationException();
-    }
-
-    private async Task ValidateUpdateDto(UpdateBookDto dto)
-    {
-        var result = await _updateValidator.ValidateAsync(dto);
-        if (!result.IsValid)
-            throw new Application.Exceptions.ValidationException();
     }
 
     private async Task<IEnumerable<User>> GetAllSubscribers()
     {
         return new List<User>();
     }
-    #endregion
 }
 

@@ -12,6 +12,14 @@ public class BookFileManager : IBookFileManager
         _env = env;
     }
 
+    public void DeleteFileIfExists(string? filePath)
+    {
+        if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
+        {
+            File.Delete(filePath);
+        }
+    }
+
     public void DeleteFile(string relativePath)
     {
         if (string.IsNullOrEmpty(relativePath))

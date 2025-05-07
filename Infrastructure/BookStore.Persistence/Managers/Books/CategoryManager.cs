@@ -1,36 +1,32 @@
 ﻿using AutoMapper;
+using BookStore.Application.DTOs.BookDtos;
 using BookStore.Application.DTOs.Categories;
 using BookStore.Application.Exceptions;
 using BookStore.Application.Interfaces.IManagers;
 using BookStore.Application.Interfaces.IManagers.Books;
+using BookStore.Application.Interfaces.IManagers.Helper;
 using BookStore.Domain.Entities.Categories;
 using BookStore.Infrastructure.BaseMessages;
-using FluentValidation;
 
 namespace BookStore.Persistence.Managers.Books;
-
 public class CategoryManager : ICategoryManager
 {
     private readonly IMapper _mapper;
     private readonly IBaseManager<Category> _baseManager;
-    private readonly IValidator<CreateCategoryDto> _createValidator;
-    private readonly IValidator<UpdateCategoryDto> _updateValidator;
+    private readonly IClaimManager _claimManager;
+    private readonly IBookFileManager _fileManager;
 
-    public CategoryManager(
-        IMapper mapper,
-        IBaseManager<Category> baseManager,
-        IValidator<CreateCategoryDto> createValidator,
-        IValidator<UpdateCategoryDto> updateValidator)
+    public CategoryManager(IMapper mapper, IBaseManager<Category> baseManager, IClaimManager claimManager, IBookFileManager fileManager)
     {
         _mapper = mapper;
         _baseManager = baseManager;
-        _createValidator = createValidator;
-        _updateValidator = updateValidator;
+        _claimManager = claimManager;
+        _fileManager = fileManager;
     }
 
     public async Task<bool> CreateAsync(CreateCategoryDto dto)
     {
-        await ValidateCreateDto(dto);
+        await _baseManager.ValidateAsync(dto);
         await EnsureCategoryNameIsUnique(dto.Name);
 
         var category = _mapper.Map<Category>(dto);
@@ -46,7 +42,7 @@ public class CategoryManager : ICategoryManager
                 throw new  KeyNotFoundException(UIMessage.GetNotFoundMessage("ParentCategoryId"));
             category.ParentCategoryId = dto.ParentCategoryId;
         }
-        await _baseManager.AddAsync(category);
+        await _baseManager.AddAsync(category, _claimManager.GetCurrentUserId());
         await _baseManager.Commit();
         return true;
     }
@@ -57,7 +53,7 @@ public class CategoryManager : ICategoryManager
         if (category == null)
             throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Category"));
 
-        await ValidateUpdateDto(dto);
+        await _baseManager.ValidateAsync(dto);
         await EnsureCategoryNameIsUnique(dto.Name, dto.Id);
         _mapper.Map(dto, category);
 
@@ -72,8 +68,9 @@ public class CategoryManager : ICategoryManager
                 throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("ParentCategoryId"));
             category.ParentCategoryId = dto.ParentCategoryId;
         }
-        category.UpdatedAt = DateTime.UtcNow;
-        await _baseManager.Update(category);
+      
+        _baseManager.Update(category, _claimManager.GetCurrentUserId());
+
         await _baseManager.Commit();
         return true;
     }
@@ -102,32 +99,85 @@ public class CategoryManager : ICategoryManager
         if (category.BookCategories != null && category.BookCategories.Any())
             throw new BadRequestException("Cannot delete category linked to books.");
 
-        category.DeletedAt = DateTime.UtcNow;
-        category.IsDeleted = true;
-        await _baseManager.Update(category);
+        _baseManager.Update(category, _claimManager.GetCurrentUserId());
         await _baseManager.Commit();
         return true;
     }
 
-    #region Helpers
-    private async Task ValidateCreateDto(CreateCategoryDto dto)
+    public async Task<IEnumerable<CategoryDto>> GetSubCategoriesByCategoryIdAsync(int categoryId)
     {
-        var result = await _createValidator.ValidateAsync(dto);
-        if (!result.IsValid)
-        {
-            var errors = string.Join(", ", result.Errors.Select(e => e.ErrorMessage));
-            throw new Application.Exceptions.ValidationException();
-        }
+        var category = await _baseManager.GetAsync(x => x.Id == categoryId, nameof(Category.SubCategories));
+
+        if (category == null)
+            throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Category"));
+
+        return _mapper.Map<IEnumerable<CategoryDto>>(category.SubCategories);
     }
 
-    private async Task ValidateUpdateDto(UpdateCategoryDto dto)
+    public async Task<IEnumerable<BookDto>> GetBooksBySubCategoryIdAsync(int subCategoryId)
     {
-        var result = await _updateValidator.ValidateAsync(dto);
-        if (!result.IsValid)
+        var category = await _baseManager.GetAsync(x => x.Id == subCategoryId, nameof(Category.BookCategories), "BookCategories.Book");
+
+        if (category == null)
+            throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("SubCategory"));
+        
+            var books = category.BookCategories
+           .Select(bc => bc.Book)
+           .Where(b => b != null)
+           .ToList();
+
+            return _mapper.Map<IEnumerable<BookDto>>(books);
+    }
+
+    public async Task<IEnumerable<CategoryDto>> GetDeletedCategoriesAsync()
+    {
+        var categories = await _baseManager.GetAllAsync(
+            x => x.IsDeleted,
+            nameof(Category.SubCategories));
+
+        return _mapper.Map<IEnumerable<CategoryDto>>(categories);
+    }
+
+    public async Task<bool> DeleteCategoryWithDependenciesAsync(int categoryId)
+    {
+        var category = await _baseManager.GetAsync(x => x.Id == categoryId,
+            nameof(Category.SubCategories),
+            nameof(Category.BookCategories),
+            nameof(Category.BookCategories) + "." + nameof(BookCategory.Book));
+
+        if (category == null)
+            throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Category"));
+
+        if (category.SubCategories != null)
         {
-            var errors = string.Join(", ", result.Errors.Select(e => e.ErrorMessage));
-            throw new Application.Exceptions.ValidationException();
+            foreach (var sub in category.SubCategories)
+            {
+                await DeleteCategoryWithDependenciesAsync(sub.Id);
+            }
         }
+
+        if (category.BookCategories != null)
+        {
+            foreach (var bc in category.BookCategories)
+            {
+                var book = bc.Book;
+                if (book != null)
+                {
+                    _fileManager.DeleteFileIfExists(book.CoverPath);
+                    _fileManager.DeleteFileIfExists(book.Path);
+
+                    book.IsDeleted = true;
+                    book.DeletedById = _claimManager.GetCurrentUserId();
+                    book.DeletedAt = DateTime.UtcNow;
+                }
+            }
+        }
+
+        _baseManager.SoftDelete(category, _claimManager.GetCurrentUserId());
+        _baseManager.Update(category, _claimManager.GetCurrentUserId());
+        await _baseManager.Commit();
+
+        return true;
     }
 
     private async Task EnsureCategoryNameIsUnique(string name, int id = 0)
@@ -138,6 +188,5 @@ public class CategoryManager : ICategoryManager
             throw new BadRequestException(UIMessage.GetUniqueNamedMessage("Category name"));
         }
     }
-    #endregion
 }
 

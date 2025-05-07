@@ -48,7 +48,7 @@ namespace BookStore.Persistence.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DeletedById")
+                    b.Property<int?>("DeletedById")
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
@@ -74,7 +74,7 @@ namespace BookStore.Persistence.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("UpdatedById")
+                    b.Property<int?>("UpdatedById")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -127,7 +127,7 @@ namespace BookStore.Persistence.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DeletedById")
+                    b.Property<int?>("DeletedById")
                         .HasColumnType("integer");
 
                     b.Property<string>("Description")
@@ -167,7 +167,7 @@ namespace BookStore.Persistence.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("UpdatedById")
+                    b.Property<int?>("UpdatedById")
                         .HasColumnType("integer");
 
                     b.Property<int>("ViewCount")
@@ -215,7 +215,7 @@ namespace BookStore.Persistence.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DeletedById")
+                    b.Property<int?>("DeletedById")
                         .HasColumnType("integer");
 
                     b.Property<bool>("IsDeleted")
@@ -234,7 +234,7 @@ namespace BookStore.Persistence.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("UpdatedById")
+                    b.Property<int?>("UpdatedById")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -264,7 +264,7 @@ namespace BookStore.Persistence.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DeletedById")
+                    b.Property<int?>("DeletedById")
                         .HasColumnType("integer");
 
                     b.Property<int>("FromUserId")
@@ -292,7 +292,7 @@ namespace BookStore.Persistence.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("UpdatedById")
+                    b.Property<int?>("UpdatedById")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");
@@ -303,7 +303,7 @@ namespace BookStore.Persistence.Migrations
 
                     b.HasIndex("FromUserId", "ToUserId");
 
-                    b.ToTable("Reviews", (string)null);
+                    b.ToTable("reviews", (string)null);
                 });
 
             modelBuilder.Entity("BookStore.Domain.Entities.Users.User", b =>
@@ -326,7 +326,7 @@ namespace BookStore.Persistence.Migrations
                     b.Property<DateTime?>("DeletedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("DeletedById")
+                    b.Property<int?>("DeletedById")
                         .HasColumnType("integer");
 
                     b.Property<string>("Email")
@@ -386,7 +386,7 @@ namespace BookStore.Persistence.Migrations
                     b.Property<DateTime?>("UpdatedAt")
                         .HasColumnType("timestamp with time zone");
 
-                    b.Property<int>("UpdatedById")
+                    b.Property<int?>("UpdatedById")
                         .HasColumnType("integer");
 
                     b.HasKey("Id");

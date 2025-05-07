@@ -30,10 +30,8 @@ public class ReviewManager : IReviewManager
     public async Task<bool> CreateAsync(CreateReviewDto dto)
     {
         var review = _mapper.Map<Review>(dto);
-        review.CreatedAt = DateTime.UtcNow;
         review.FromUserId = _claimManager.GetCurrentUserId();
-        review.CreatedById = review.FromUserId;
-        await _baseManager.AddAsync(review);
+        await _baseManager.AddAsync(review, review.FromUserId);
         await _baseManager.Commit();
         return true;
     }
@@ -47,10 +45,8 @@ public class ReviewManager : IReviewManager
             throw new AuthenticationException("This is not your message.");
         review.Message = dto.Message;
         review.Rating = dto.Rating;
-        review.UpdatedAt = DateTime.UtcNow;
-        review.UpdatedById = review.FromUserId;
 
-        await _baseManager.Update(review);
+        _baseManager.Update(review, review.FromUserId);
         await _baseManager.Commit();
         return true;
     }
@@ -133,31 +129,16 @@ public class ReviewManager : IReviewManager
         review.IsDeleted = isdeleted;
         if (isdeleted)
         {
-            review.DeletedAt = DateTime.UtcNow;
-            review.DeletedById = _claimManager.GetCurrentUserId();
+            _baseManager.SoftDelete(review, _claimManager.GetCurrentUserId());
+            _baseManager.SoftRemoveRange(review.Replies, _claimManager.GetCurrentUserId());
         }
         else
         {
+            review.DeletedById = null;
             review.DeletedAt = null;
-            review.DeletedById = 0;
         }
 
-        foreach (var reply in review.Replies.Where(r => !r.IsDeleted))
-        {
-            reply.IsDeleted = isdeleted;
-            if (isdeleted)
-            {
-                reply.DeletedAt = DateTime.UtcNow;
-                reply.DeletedById = _claimManager.GetCurrentUserId();
-            }
-            else
-            {
-                reply.DeletedAt = null;
-                reply.DeletedById = 0;
-            }
-        }
-
-        await _baseManager.Update(review);
+        _baseManager.Update(review, _claimManager.GetCurrentUserId());
         await _baseManager.Commit();
         return true;
     }

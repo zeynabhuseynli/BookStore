@@ -28,9 +28,7 @@ public class AuthorManager : IAuthorManager
         await EnsureAuthorDoesNotExist(dto);
 
         var author = _mapper.Map<Author>(dto);
-        author.CreatedAt = DateTime.UtcNow;
-        author.CreatedById = _claimManager.GetCurrentUserId();
-        await _baseManager.AddAsync(author);
+        await _baseManager.AddAsync(author, _claimManager.GetCurrentUserId());
         await _baseManager.Commit();
         return true;
     }
@@ -44,9 +42,8 @@ public class AuthorManager : IAuthorManager
         await EnsureAuthorDoesNotExist(dto, dto.Id);
 
         _mapper.Map(dto, author);
-        author.UpdatedAt = DateTime.UtcNow;
-        author.UpdatedById = _claimManager.GetCurrentUserId();
-        await _baseManager.Update(author);
+
+        _baseManager.Update(author, _claimManager.GetCurrentUserId());
         await _baseManager.Commit();
         return true;
     }

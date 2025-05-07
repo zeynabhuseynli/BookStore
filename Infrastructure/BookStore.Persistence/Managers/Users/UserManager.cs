@@ -55,6 +55,11 @@ public class UserManager : IUserManager
         if (!PasswordHasher.VerifyPassword(user.PasswordHash, dto.Password))
         {
             user.LoginCount += 1;
+            if (user.LoginCount == 5)
+            {
+                await SetUserActivationStatusAsync(user.Id, false);
+                throw new AuthenticationException("Siz artiq 5 defe sehv parol daxil etmisiniz! Zehmet olmasa admin ile elaqe saxlayin!");
+            }
             return null;
         }
 
@@ -63,11 +68,11 @@ public class UserManager : IUserManager
         var secret = jwtSettings["Secret"];
         var expireAt = int.Parse(jwtSettings["ExpireAt"]);
 
-        var tokens = Generator.GenerateTokens(user.Id,user.Email,user.Role.ToString(), secret, expireAt);
+        var tokens = Generator.GenerateTokens(user.Id, user.Email, user.Role.ToString(), secret, expireAt);
         if (tokens == null)
             throw new AuthenticationException(UIMessage.INVALID_MESSAGE);
         user.UpdateRefreshToken(tokens.RefreshToken);
-        await _baseManager.Update(user);
+        _baseManager.Update(user);
         await _baseManager.Commit();
         return tokens;
     }
@@ -80,7 +85,7 @@ public class UserManager : IUserManager
 
         var otpCode = Generator.GenerateOtpCode();
         user.UpdateOtp(otpCode);
-        await _baseManager.Update(user);
+        _baseManager.Update(user);
         await _baseManager.Commit();
 
         await _emailManager.SendOtpAsync(user.Email, otpCode.ToString());
@@ -94,7 +99,7 @@ public class UserManager : IUserManager
             return false;
 
         user.ResetPassword(PasswordHasher.HashPassword(dto.NewPassword));
-        await _baseManager.Update(user);
+        _baseManager.Update(user);
         await _baseManager.Commit();
         return true;
     }
@@ -109,7 +114,7 @@ public class UserManager : IUserManager
 
         user.SetDetailsForUpdate(dto.FirstName, dto.LastName, dto.Email, dto.Gender, dto.BirthDate);
         user.UpdateRefreshToken(user.RefreshToken);
-        await _baseManager.Update(user);
+        _baseManager.Update(user);
         await _baseManager.Commit();
         return true;
     }
@@ -122,7 +127,7 @@ public class UserManager : IUserManager
 
         user.SetPasswordHash(PasswordHasher.HashPassword(dto.NewPassword));
         user.UpdateRefreshToken(user.RefreshToken);
-        await _baseManager.Update(user);
+        _baseManager.Update(user);
         await _baseManager.Commit();
         return true;
     }
@@ -132,8 +137,9 @@ public class UserManager : IUserManager
         var user = await _baseManager.GetAsync(x => x.Id == userId && x.IsActivated);
         if (user == null) return false;
 
-        user.SetForSoftDelete();
-        await _baseManager.Update(user);
+        user.UpdateRefreshToken(null);
+        _baseManager.SoftDelete(user);
+        _baseManager.Update(user);
         await _baseManager.Commit();
         return true;
     }
@@ -149,7 +155,7 @@ public class UserManager : IUserManager
             throw new AuthenticationException();
 
         user.UpdateRole(dto.Role);
-        await _baseManager.Update(user);
+        _baseManager.Update(user, _claimManager.GetCurrentUserId());
         await _baseManager.Commit();
         return true;
     }
@@ -165,10 +171,10 @@ public class UserManager : IUserManager
     public async Task<UserDto?> GetCurrentUserAsync()
     {
         var userId = _claimManager.GetCurrentUserId();
-        if (userId<=0)
+        if (userId <= 0)
             return null;
 
-        var user = await _baseManager.GetAsync(x=>x.Id==userId);
+        var user = await _baseManager.GetAsync(x => x.Id == userId);
         return user == null ? null : _mapper.Map<UserDto>(user);
     }
 
@@ -194,13 +200,11 @@ public class UserManager : IUserManager
 
     public async Task<bool> SetUserActivationStatusAsync(int userId, bool activate)
     {
-        var user = await _baseManager.GetAsync(x=>x.Id==userId);
+        var user = await _baseManager.GetAsync(x => x.Id == userId);
         if (user == null)
             return false;
         user.GetActiveOrDeActive(activate);
-        user.UpdatedById = _claimManager.GetCurrentUserId();
-        user.UpdatedAt = DateTime.UtcNow;
-        await _baseManager.Update(user);
+        _baseManager.Update(user, _claimManager.GetCurrentUserId());
         await _baseManager.Commit();
         return true;
     }
@@ -209,9 +213,9 @@ public class UserManager : IUserManager
     {
         var currentUserId = _claimManager.GetCurrentUserId();
         if (currentUserId <= 0)
-            throw new AuthenticationException("Bu rəyi silmək üçün səlahiyyətiniz yoxdur.");
+            throw new AuthenticationException();
 
-        await CheckPermissionAsync(currentUserId,ownerUserId);
+        await CheckPermissionAsync(currentUserId, ownerUserId);
     }
 
     private async Task CheckPermissionAsync(int currentUserId, int? userId)

@@ -1,52 +1,43 @@
-﻿using BookStore.Application.DTOs.Categories;
-using BookStore.Application.Interfaces.IManagers.Books;
-using BookStore.Infrastructure.BaseMessages;
+﻿using BookStore.Application.Interfaces.IManagers.Books;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers;
 [Route("api/[controller]")]
 [ApiController]
-public class CategoryController : ControllerBase
+public class CategoriesController : ControllerBase
 {
     private readonly ICategoryManager _categoryManager;
 
-    public CategoryController(ICategoryManager categoryManager)
+    public CategoriesController(ICategoryManager categoryManager)
     {
         _categoryManager = categoryManager;
     }
 
-    [HttpGet("get-all")]
-    public async Task<ActionResult<IEnumerable<CategoryDto>>> GetAllAsync()
+    [HttpGet("{id}")]
+    public async Task<IActionResult> GetById(int id)
+    {
+        var category = await _categoryManager.GetByIdAsync(id);
+        return category == null ? NotFound("Category not found.") : Ok(category);
+    }
+
+    [HttpGet("all")]
+    public async Task<IActionResult> GetAll()
     {
         var categories = await _categoryManager.GetAllAsync();
         return Ok(categories);
     }
 
-    [HttpGet("get-category/{id}")]
-    public async Task<ActionResult<CategoryDto>> GetByIdAsync(int id)
+    [HttpGet("{categoryId}/subcategories")]
+    public async Task<IActionResult> GetSubCategories(int categoryId)
     {
-        var category = await _categoryManager.GetByIdAsync(id);
-        return category == null ? NotFound(UIMessage.GetNotFoundMessage("Category id")) : Ok(category);
+        var subCategories = await _categoryManager.GetSubCategoriesByCategoryIdAsync(categoryId);
+        return Ok(subCategories);
     }
 
-    [HttpPost("create")]
-    public async Task<IActionResult> CreateAsync([FromBody] CreateCategoryDto dto)
+    [HttpGet("subcategory/{subCategoryId}/books")]
+    public async Task<IActionResult> GetBooksBySubCategory(int subCategoryId)
     {
-        await _categoryManager.CreateAsync(dto);
-        return Ok();
-    }
-
-    [HttpPut("update")]
-    public async Task<IActionResult> UpdateAsync([FromBody] UpdateCategoryDto dto)
-    {
-        await _categoryManager.UpdateAsync(dto);
-        return Ok();
-    }
-
-    [HttpDelete("delete/{id}")]
-    public async Task<IActionResult> DeleteAsync(int id)
-    {
-        var result = await _categoryManager.DeleteAsync(id);
-        return result ? Ok(UIMessage.DELETED_MESSAGE) : NotFound();
+        var books = await _categoryManager.GetBooksBySubCategoryIdAsync(subCategoryId);
+        return Ok(books);
     }
 }

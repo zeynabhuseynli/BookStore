@@ -42,12 +42,6 @@ public class User : BaseEntity
         DeletedAt = null;
     }
 
-    public void SetForSoftDelete()
-    {
-        IsDeleted = true;
-        DeletedAt = DateTime.UtcNow;
-        UpdateRefreshToken(null);
-    }
     public void SetDetailsForUpdate(string firstName, string lastName, string email, Gender gender, DateTime dateTime)
     {
         FirstName = firstName.Capitalize();

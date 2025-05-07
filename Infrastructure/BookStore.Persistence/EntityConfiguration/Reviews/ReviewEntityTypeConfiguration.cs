@@ -7,7 +7,7 @@ public class ReviewEntityTypeConfiguration : IEntityTypeConfiguration<Review>
 {
     public void Configure(EntityTypeBuilder<Review> builder)
     {
-        builder.ToTable("Reviews");
+        builder.ToTable("reviews");
 
         builder.HasKey(r => r.Id);
 
