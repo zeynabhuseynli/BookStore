@@ -21,7 +21,7 @@ public class CategoriesController : ControllerBase
     public async Task<IActionResult> Create([FromBody] CreateCategoryDto dto)
     {
         await _categoryManager.CreateAsync(dto);
-        return Ok("Category created successfully.");
+        return Ok(UIMessage.ADD_MESSAGE);
     }
 
     [HttpPut]

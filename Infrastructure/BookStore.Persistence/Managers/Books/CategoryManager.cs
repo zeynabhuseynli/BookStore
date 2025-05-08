@@ -92,10 +92,10 @@ public class CategoryManager : ICategoryManager
             throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Category"));
 
         if (category.SubCategories != null && category.SubCategories.Any())
-            throw new BadRequestException("Cannot delete category with subcategories.");
+            throw new BadRequestException(UIMessage.CATEGORY_HAS_SUBCATEGORIES);
 
         if (category.BookCategories != null && category.BookCategories.Any())
-            throw new BadRequestException("Cannot delete category linked to books.");
+            throw new BadRequestException(UIMessage.CATEGORY_LINKED_TO_BOOKS);
 
         _baseManager.Update(category, _claimManager.GetCurrentUserId());
         await _baseManager.Commit();
@@ -234,3 +234,4 @@ public class CategoryManager : ICategoryManager
         }
     }
 }
+

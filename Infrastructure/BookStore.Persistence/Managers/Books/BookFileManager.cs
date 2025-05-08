@@ -1,4 +1,5 @@
 ﻿using BookStore.Application.Interfaces.IManagers.Books;
+using BookStore.Infrastructure.BaseMessages;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 
@@ -17,11 +18,6 @@ public class BookFileManager : IBookFileManager
             Directory.CreateDirectory(_env.WebRootPath);
         }
     }
-    // public void DeleteFileIfExists(string? filePath)
-    // {
-    //     if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
-    //         File.Delete(filePath);
-    // }
 
     public void DeleteFile(string relativePath)
     {
@@ -37,7 +33,7 @@ public class BookFileManager : IBookFileManager
     public async Task<string> UploadSingleFileAsync(IFormFile file, string folder)
     {
         if (file.Length > 10 * 1024 * 1024)
-            throw new InvalidOperationException("Fayl çox böyükdür. Maksimum 10MB icazə verilir.");
+            throw new InvalidOperationException(UIMessage.GetFileTooLargeMessage(100));
 
         string folderPath = Path.Combine(_env.WebRootPath, "uploads", folder);
         Directory.CreateDirectory(folderPath);
@@ -54,7 +50,7 @@ public class BookFileManager : IBookFileManager
     public async Task<(string pdfPath, string imagePath)> UploadBookFilesAsync(IFormFile pdfFile, IFormFile coverImage)
     {
         if (pdfFile.Length > 100 * 1024 * 1024)
-            throw new InvalidOperationException("Fayl çox böyükdür. Maksimum 100 MB icazə verilir.");
+            throw new InvalidOperationException();
 
         string folderPath = Path.Combine(_env.WebRootPath, "uploads", "books");
         Directory.CreateDirectory(folderPath);
@@ -80,10 +76,10 @@ public class BookFileManager : IBookFileManager
     public string GetFullFilePath(string relativePath)
     {
         if (string.IsNullOrWhiteSpace(relativePath))
-            throw new ArgumentException($"Fayl yolu düzgün deyil: '{relativePath}'");
+            throw new ArgumentException(UIMessage.FILE_PATH_NULL_OR_EMPTY(relativePath));
 
         if (Path.GetInvalidPathChars().Any(relativePath.Contains))
-            throw new ArgumentException($"Fayl yolunda icazəsiz simvol var: '{relativePath}'");
+            throw new ArgumentException(UIMessage.FILE_PATH_INVALID(relativePath));
 
         if (relativePath.StartsWith("/"))
             relativePath = relativePath.Substring(1);

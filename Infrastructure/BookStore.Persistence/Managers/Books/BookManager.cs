@@ -209,12 +209,12 @@ public class BookManager : IBookManager
             throw new KeyNotFoundException(UIMessage.GetNotFoundMessage("Book"));
 
         if (string.IsNullOrWhiteSpace(book.Path))
-            throw new FileNotFoundException("Kitabın PDF faylı mövcud deyil.");
+            throw new FileNotFoundException(UIMessage.GetNotFoundMessage(book.Path));
 
         string fullPath = _fileManager.GetFullFilePath(book.Path);
 
         if (!File.Exists(fullPath))
-            throw new FileNotFoundException("PDF faylı tapılmadı.", fullPath);
+            throw new FileNotFoundException(UIMessage.GetNotFoundMessage(fullPath));
 
         await _emailManager.SendPdfAsync(
             user.Email,

@@ -1,5 +1,6 @@
 ﻿using BookStore.Application.DTOs.BookDtos;
 using BookStore.Application.Interfaces.IManagers.Books;
+using BookStore.Infrastructure.BaseMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -48,7 +49,7 @@ public class BooksController : ControllerBase
     public async Task<IActionResult> SendPdfToEmail(int id)
     {
         await _bookManager.SendBookPdfToEmailAsync(id);
-        return Ok("PDF kitab emailinizə göndərildi.");
+        return Ok(UIMessage.BOOK_PDF_SENT);
     }
 }
 

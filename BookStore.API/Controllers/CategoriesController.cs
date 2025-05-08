@@ -1,4 +1,5 @@
 ﻿using BookStore.Application.Interfaces.IManagers.Books;
+using BookStore.Infrastructure.BaseMessages;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BookStore.API.Controllers;
@@ -17,7 +18,7 @@ public class CategoriesController : ControllerBase
     public async Task<IActionResult> GetById(int id)
     {
         var category = await _categoryManager.GetByIdAsync(id);
-        return category == null ? NotFound("Category not found.") : Ok(category);
+        return category == null ? NotFound(UIMessage.GetNotFoundMessage("Category")) : Ok(category);
     }
 
     [HttpGet("all")]

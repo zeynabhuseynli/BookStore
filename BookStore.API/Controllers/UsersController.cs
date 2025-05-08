@@ -1,5 +1,6 @@
 ﻿using BookStore.Application.DTOs.UserDtos;
 using BookStore.Application.Interfaces.IManagers;
+using BookStore.Infrastructure.BaseMessages;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,7 +36,7 @@ public class UsersController : ControllerBase
     public async Task<IActionResult> Login([FromBody] LoginDto dto)
     {
         var tokens = await _userManager.LoginAsync(dto);
-        if (tokens == null) return Unauthorized("Email or password is not true!");
+        if (tokens == null) return Unauthorized(UIMessage.EMAIL_OR_PASSWORD_INVALID);
         return Ok(tokens);
     }
 

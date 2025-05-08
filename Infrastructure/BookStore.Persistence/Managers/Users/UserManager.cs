@@ -60,7 +60,7 @@ public class UserManager : IUserManager
             if (user.LoginCount == 5)
             {
                 await SetUserActivationStatusAsync(user.Id, false);
-                throw new AuthenticationException("Siz artiq 5 defe sehv parol daxil etmisiniz! Zehmet olmasa admin ile elaqe saxlayin!");
+                throw new AuthenticationException(UIMessage.ACCOUNT_LOCKED_AFTER_FAILED_ATTEMPTS);
             }
             return null;
         }
@@ -104,10 +104,10 @@ public class UserManager : IUserManager
             return false;
 
         if (DateTime.UtcNow.AddMinutes(-20) > user.PasswordResetOtpDate || user.PasswordResetOtpDate > DateTime.UtcNow)
-            throw new InvalidDataException("Otp codun vaxti keçmişdir ve ya sehvdir");
+            throw new InvalidDataException(UIMessage.OTP_INVALID_OR_EXPIRED);
 
         if (user.PasswordHash == PasswordHasher.HashPassword(dto.NewPassword))
-            throw new ArgumentException("Keçmiş parol ile eyni parolu yazmaq olmaz");
+            throw new ArgumentException(UIMessage.PASSWORD_SAME_AS_OLD);
 
         user.ResetPassword(PasswordHasher.HashPassword(dto.NewPassword));
         _baseManager.Update(user);
@@ -139,7 +139,7 @@ public class UserManager : IUserManager
         if (user == null) return false;
 
         if (user.PasswordHash == PasswordHasher.HashPassword(dto.NewPassword))
-            throw new ArgumentException("Keçmiş parol ile eyni parolu yazmaq olmaz");
+            throw new ArgumentException(UIMessage.PASSWORD_SAME_AS_OLD);
 
         user.SetPasswordHash(PasswordHasher.HashPassword(dto.NewPassword));
         user.UpdateRefreshToken(user.RefreshToken);
@@ -241,7 +241,7 @@ public class UserManager : IUserManager
             currentUser.Role != Role.Admin &&
             currentUser.Role != Role.SuperAdmin)
         {
-            throw new AuthenticationException("Bu əməliyyatı yerinə yetirmək üçün səlahiyyətiniz yoxdur.");
+            throw new AuthenticationException(UIMessage.NO_PERMISSION);
         }
     }
 
