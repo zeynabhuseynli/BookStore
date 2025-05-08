@@ -33,12 +33,12 @@ public class ClaimManager : IClaimManager
 
     public Claim GetUserClaim(string claimType)
     {
-        var user = _httpContextAccessor.HttpContext.User;
+        var user = _httpContextAccessor?.HttpContext?.User;
 
-        if (!user.Identity.IsAuthenticated)
+        if (user==null||!user.Identity.IsAuthenticated)
             throw new AuthenticationException(UIMessage.USER_NOT_AUTHENTICATED);
 
-        var claim = user.FindFirst(claimType);
+        var claim = user?.FindFirst(claimType);
 
         if (claim == null)
             throw new AuthenticationException(UIMessage.USER_MISSING_REQUIRED_CLAIM);
