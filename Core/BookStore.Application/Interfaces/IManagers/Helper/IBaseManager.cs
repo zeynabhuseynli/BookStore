@@ -7,8 +7,9 @@ public interface IBaseManager<T> where T : BaseEntity
     Task Commit();
     Task AddAsync(T entity, int? currentUserId = null);
     void Update<TEntity>(TEntity entity, int? currentUserId = null) where TEntity : BaseEntity;
+    
     void HardDelete<TEntity>(TEntity entity) where TEntity : class;
-    bool HardRemoveRange(IEnumerable<T> entities);
+    void HardRemoveRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class;
     void SoftDelete<TEntity>(TEntity entity, int? currentUserId = null) where TEntity : BaseEntity;
     bool SoftRemoveRange<TEntity>(IEnumerable<TEntity> entities, int currentUserId) where TEntity : BaseEntity;
     void Recover<TEntity>(TEntity entity) where TEntity : BaseEntity;

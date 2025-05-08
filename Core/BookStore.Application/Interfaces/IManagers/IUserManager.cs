@@ -1,4 +1,5 @@
 ﻿using BookStore.Application.DTOs.UserDtos;
+using BookStore.Domain.Entities.Users;
 using BookStore.Infrastructure.Utils;
 
 namespace BookStore.Application.Interfaces.IManagers;
@@ -20,6 +21,7 @@ public interface IUserManager
     Task<bool> SetUserActivationStatusAsync(int userId, bool activate);
 
     Task CheckPermissionOrThrowAsync(int? ownerUserId);
+    Task<IEnumerable<User>> GetAllSubscribers();
 
 }
 

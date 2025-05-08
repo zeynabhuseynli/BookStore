@@ -62,7 +62,6 @@ public class EmailManager:IEmailManager
         await smtpClient.SendMailAsync(mailMessage);
     }
 
-
     public async Task SendEmailForSubscribers(IEnumerable<User> subscribers, string subject, string title, string description)
     {
         if (subscribers != null && subscribers.Count() > 0)
@@ -76,6 +75,35 @@ public class EmailManager:IEmailManager
                 );
             }
         }
+    }
+
+    public async Task SendPdfAsync(string toEmail, string subject, string messageBody, string pdfFilePath)
+    {
+        var smtpSettings = _configuration.GetSection("Smtp");
+
+        var smtpClient = new SmtpClient(smtpSettings["Host"])
+        {
+            Port = int.Parse(smtpSettings["Port"]),
+            Credentials = new NetworkCredential(smtpSettings["UserName"], smtpSettings["Password"]),
+            EnableSsl = bool.Parse(smtpSettings["EnableSsl"])
+        };
+
+        var mailMessage = new MailMessage
+        {
+            From = new MailAddress(smtpSettings["UserName"]),
+            Subject = subject,
+            Body = messageBody,
+            IsBodyHtml = true
+        };
+
+        mailMessage.To.Add(toEmail);
+
+        if (!File.Exists(pdfFilePath))
+            throw new FileNotFoundException("PDF faylı tapılmadı.", pdfFilePath);
+
+        mailMessage.Attachments.Add(new Attachment(pdfFilePath, "application/pdf"));
+
+        await smtpClient.SendMailAsync(mailMessage);
     }
 }
 

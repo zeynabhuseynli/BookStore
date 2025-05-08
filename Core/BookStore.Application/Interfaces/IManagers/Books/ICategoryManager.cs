@@ -14,7 +14,5 @@ public interface ICategoryManager
     Task<bool> SoftDeleteCategoryWithDependenciesAsync(int categoryId);
     Task<bool> RecoverCategoryWithDependenciesAsync(int categoryId);
     Task<IEnumerable<CategoryDto>> GetDeletedCategoriesAsync();
-
-
 }
 

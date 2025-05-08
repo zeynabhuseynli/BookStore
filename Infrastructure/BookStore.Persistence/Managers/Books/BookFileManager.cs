@@ -9,37 +9,36 @@ public class BookFileManager : IBookFileManager
 
     public BookFileManager(IWebHostEnvironment env)
     {
-        _env = env;
-    }
+        _env = env ?? throw new ArgumentNullException(nameof(env));
 
-    public void DeleteFileIfExists(string? filePath)
-    {
-        if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
+        if (string.IsNullOrWhiteSpace(_env.WebRootPath))
         {
-            File.Delete(filePath);
+            _env.WebRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot");
+            Directory.CreateDirectory(_env.WebRootPath);
         }
     }
+    // public void DeleteFileIfExists(string? filePath)
+    // {
+    //     if (!string.IsNullOrEmpty(filePath) && File.Exists(filePath))
+    //         File.Delete(filePath);
+    // }
 
     public void DeleteFile(string relativePath)
     {
         if (string.IsNullOrEmpty(relativePath))
             return;
 
-        // Əgər path "/" ilə başlayırsa, onu təmizlə
-        if (relativePath.StartsWith("/"))
-            relativePath = relativePath.Substring(1);
-
-        // Tam yol (wwwroot daxilində)
-        string fullPath = Path.Combine(_env.WebRootPath, relativePath);
+        string fullPath = GetFullFilePath(relativePath);
 
         if (File.Exists(fullPath))
-        {
             File.Delete(fullPath);
-        }
     }
 
     public async Task<string> UploadSingleFileAsync(IFormFile file, string folder)
     {
+        if (file.Length > 10 * 1024 * 1024)
+            throw new InvalidOperationException("Fayl çox böyükdür. Maksimum 10MB icazə verilir.");
+
         string folderPath = Path.Combine(_env.WebRootPath, "uploads", folder);
         Directory.CreateDirectory(folderPath);
 
@@ -54,6 +53,9 @@ public class BookFileManager : IBookFileManager
 
     public async Task<(string pdfPath, string imagePath)> UploadBookFilesAsync(IFormFile pdfFile, IFormFile coverImage)
     {
+        if (pdfFile.Length > 100 * 1024 * 1024)
+            throw new InvalidOperationException("Fayl çox böyükdür. Maksimum 100 MB icazə verilir.");
+
         string folderPath = Path.Combine(_env.WebRootPath, "uploads", "books");
         Directory.CreateDirectory(folderPath);
 
@@ -69,11 +71,24 @@ public class BookFileManager : IBookFileManager
             await coverImage.CopyToAsync(stream);
         }
 
-        // Return relative paths
         return (
             pdfPath: $"/uploads/books/{Path.GetFileName(pdfPath)}",
             imagePath: $"/uploads/books/{Path.GetFileName(imagePath)}"
         );
+    }
+
+    public string GetFullFilePath(string relativePath)
+    {
+        if (string.IsNullOrWhiteSpace(relativePath))
+            throw new ArgumentException($"Fayl yolu düzgün deyil: '{relativePath}'");
+
+        if (Path.GetInvalidPathChars().Any(relativePath.Contains))
+            throw new ArgumentException($"Fayl yolunda icazəsiz simvol var: '{relativePath}'");
+
+        if (relativePath.StartsWith("/"))
+            relativePath = relativePath.Substring(1);
+
+        return Path.Combine(_env.WebRootPath, relativePath);
     }
 }
 

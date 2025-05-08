@@ -15,12 +15,12 @@ public class UpdateBookDtoValidator : AbstractValidator<UpdateBookDto>
         RuleFor(x => x.CategoryIds).NotEmpty();
         RuleFor(x => x.AuthorIds).NotEmpty();
 
-        When(x => x.PdfFile is not null, () =>
+        When(x => x.PdfFile != null, () =>
         {
             RuleFor(x => x.PdfFile.ContentType).Equal("application/pdf").WithMessage("Only PDF allowed");
         });
 
-        When(x => x.CoverImage is not null, () =>
+        When(x => x.CoverImage != null, () =>
         {
             RuleFor(x => x.CoverImage.ContentType).Must(type => type.StartsWith("image/")).WithMessage("Only image files allowed");
         });

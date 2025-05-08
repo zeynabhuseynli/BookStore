@@ -10,5 +10,15 @@ public class ReviewDto
     public int? ParentId { get; set; }
     public DateTime CreatedAt { get; set; }
     public List<ReviewDto>? Replies { get; set; }
+
+    public int? CreatedById { get; set; }
+
+    public DateTime? UpdatedAt { get; set; }
+    public int? UpdatedById { get; set; }
+
+    public DateTime? DeletedAt { get; set; }
+    public int? DeletedById { get; set; }
+
+    public bool IsDeleted { get; set; }
 }
 

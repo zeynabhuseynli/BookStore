@@ -34,13 +34,14 @@ public class ExceptionHandlingMiddleware
 
         switch (ex)
         {
+            case ArgumentNullException:
             case ApplicationException:
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
                 problemDetails.Detail = ex.Message;
                 problemDetails.Title = "Application Error";
                 break;
-            case InvalidOperationException:
             case InvalidDataException:
+            case FileNotFoundException:
             case KeyNotFoundException:
                 response.StatusCode = (int)HttpStatusCode.NotFound;
                 problemDetails.Detail = ex.Message;
@@ -59,6 +60,7 @@ public class ExceptionHandlingMiddleware
                 problemDetails.Title = "Unauthorized";
                 break;
             case ArgumentException:
+            case InvalidOperationException:
             case BadRequestException:
                 response.StatusCode = (int)HttpStatusCode.BadRequest;
                 problemDetails.Detail = ex.Message;

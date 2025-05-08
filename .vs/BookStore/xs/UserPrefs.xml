@@ -1,56 +1,34 @@
 ﻿<Properties StartupConfiguration="{5142A44E-C656-4268-B57B-2971B82A9C72}|https" GitUserInfo="UsingGIT">
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <Breakpoint file="/Users/zeyneb/Projects/BookStore/BookStore.API/Controllers/CategoriesController.cs" relfile="BookStore.API/Controllers/CategoriesController.cs" line="38" column="1" />
-    <Breakpoint file="/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/Managers/Helper/BaseManager.cs" relfile="Infrastructure/BookStore.Persistence/Managers/Helper/BaseManager.cs" line="91" column="1" />
-    <Breakpoint file="/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/Managers/Books/CategoryManager.cs" relfile="Infrastructure/BookStore.Persistence/Managers/Books/CategoryManager.cs" line="118" column="1" />
+    <BreakpointStore>
+      <Breakpoint file="/Users/zeyneb/Projects/BookStore/BookStore.API/Controllers/CategoriesController.cs" relfile="BookStore.API/Controllers/CategoriesController.cs" line="38" column="1" />
+      <Breakpoint file="/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/Managers/Books/BookManager.cs" relfile="Infrastructure/BookStore.Persistence/Managers/Books/BookManager.cs" line="44" column="1" />
+      <Breakpoint file="/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/Managers/Books/BookFileManager.cs" relfile="Infrastructure/BookStore.Persistence/Managers/Books/BookFileManager.cs" line="36" column="1" />
+      <Breakpoint file="/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/Managers/Books/BookFileManager.cs" relfile="Infrastructure/BookStore.Persistence/Managers/Books/BookFileManager.cs" line="40" column="1" />
+      <Breakpoint file="/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/Managers/Books/BookFileManager.cs" relfile="Infrastructure/BookStore.Persistence/Managers/Books/BookFileManager.cs" line="43" column="1" />
+      <Breakpoint file="/Users/zeyneb/Projects/BookStore/Infrastructure/BookStore.Persistence/Managers/Books/BookManager.cs" relfile="Infrastructure/BookStore.Persistence/Managers/Books/BookManager.cs" line="39" column="1" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.ItemProperties.BookStore.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Infrastructure/BookStore.Persistence/EntityConfiguration/Reviews/ReviewEntityTypeConfiguration.cs">
-    <Files>
-      <File FileName="BookStore.API/Controllers/CategoriesController.cs" Line="40" Column="1" />
-      <File FileName="Infrastructure/BookStore.Persistence/Managers/Books/CategoryManager.cs" Line="119" Column="1" />
-      <File FileName="Infrastructure/BookStore.Persistence/Managers/Helper/BaseManager.cs" Line="101" Column="1" />
-      <File FileName="Infrastructure/BookStore.Persistence/Data/AppDbContext.cs" Line="24" Column="1" />
-      <File FileName="Infrastructure/BookStore.Persistence/EntityConfiguration/Books/AuthorEntityTypeConfiguration.cs" Line="10" Column="33" />
-      <File FileName="Infrastructure/BookStore.Persistence/EntityConfiguration/Books/BookAuthorEntityTypeConfiguration.cs" Line="23" Column="1" />
-      <File FileName="Infrastructure/BookStore.Persistence/EntityConfiguration/Books/BookEntityTypeConfiguration.cs" Line="77" Column="1" />
-      <File FileName="Infrastructure/BookStore.Persistence/EntityConfiguration/Categories/BookCategoryEntityTypeConfiguration.cs" Line="23" Column="1" />
-      <File FileName="Infrastructure/BookStore.Persistence/EntityConfiguration/Categories/CategoryEntityTypeConfiguration.cs" Line="46" Column="1" />
-      <File FileName="Infrastructure/BookStore.Persistence/EntityConfiguration/Reviews/ReviewEntityTypeConfiguration.cs" Line="10" Column="27" />
-      <File FileName="Infrastructure/BookStore.Persistence/EntityConfiguration/Users/UserEntityTypeConfiguration.cs" Line="86" Column="1" />
-      <File FileName="BookStore.AdminPanel/Middleware/ExceptionHandlingMiddleware.cs" Line="21" Column="1" />
-      <File FileName="BookStore.API/Controllers/BookController.cs" Line="1" Column="1" />
-    </Files>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench>
     <Pads>
       <Pad Id="ProjectPad">
         <State name="__root__">
           <Node name="BookStore" expanded="True">
+            <Node name="Core" expanded="True" />
             <Node name="Infrastructure" expanded="True">
-              <Node name="BookStore.Persistence">
-                <Node name="Data" expanded="True" />
-                <Node name="EntityConfiguration" expanded="True">
-                  <Node name="Books" expanded="True" />
-                  <Node name="Categories" expanded="True" />
-                  <Node name="Reviews" expanded="True">
-                    <Node name="ReviewEntityTypeConfiguration.cs" selected="True" />
-                  </Node>
-                  <Node name="Users" expanded="True" />
-                </Node>
+              <Node name="BookStore.Persistence" expanded="True">
                 <Node name="Managers" expanded="True">
                   <Node name="Books" expanded="True" />
-                  <Node name="Helper" expanded="True" />
                 </Node>
               </Node>
-            </Node>
-            <Node name="BookStore.AdminPanel" expanded="True">
-              <Node name="Middleware" expanded="True" />
             </Node>
           </Node>
         </State>
       </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.ItemProperties.BookStore.API PreferredExecutionTarget="/Applications/Google Chrome.app" />
 </Properties>

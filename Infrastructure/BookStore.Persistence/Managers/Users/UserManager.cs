@@ -244,5 +244,11 @@ public class UserManager : IUserManager
             throw new AuthenticationException("Bu əməliyyatı yerinə yetirmək üçün səlahiyyətiniz yoxdur.");
         }
     }
+
+    public async Task<IEnumerable<User>> GetAllSubscribers()
+    {
+        var users = await _baseManager.GetAllAsync(x => x.IsActivated && x.Role != Role.Admin && x.Role != Role.SuperAdmin);
+        return users;
+    }
 }
 

@@ -35,10 +35,9 @@ public class BaseManager<T> : IBaseManager<T> where T : BaseEntity
         _context.Set<TEntity>().Remove(entity);
     }
 
-    public bool HardRemoveRange(IEnumerable<T> entities)
+    public void HardRemoveRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class
     {
-        _context.Set<T>().RemoveRange(entities);
-        return true;
+        _context.Set<TEntity>().RemoveRange(entities);
     }
 
     public void SoftDelete<TEntity>(TEntity entity, int? currentUserId = null) where TEntity : BaseEntity
@@ -82,6 +81,11 @@ public class BaseManager<T> : IBaseManager<T> where T : BaseEntity
             entity.UpdatedAt = DateTime.UtcNow;
             entity.UpdatedById = currentUserId;
         }
+        _context.Set<TEntity>().Update(entity);
+    }
+    
+    public void UpdateReferance<TEntity>(TEntity entity) where TEntity : class
+    {
         _context.Set<TEntity>().Update(entity);
     }
 
